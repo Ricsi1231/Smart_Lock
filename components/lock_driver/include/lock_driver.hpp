@@ -2,7 +2,7 @@
 
 #include "uart_driver.hpp"
 
-namespace Lock {
+namespace LockSystem {
     class Lock: public UartDriver::UartDriver {
         public:
             explicit Lock();

@@ -2,34 +2,34 @@
 	"sources" : 
 	[
 		{
-			"file" : "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/CMakeFiles/bootloader"
+			"file" : "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/CMakeFiles/bootloader"
 		},
 		{
-			"file" : "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/CMakeFiles/bootloader.rule"
+			"file" : "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/CMakeFiles/bootloader.rule"
 		},
 		{
-			"file" : "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/CMakeFiles/bootloader-complete.rule"
+			"file" : "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/CMakeFiles/bootloader-complete.rule"
 		},
 		{
-			"file" : "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
+			"file" : "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule"
 		},
 		{
-			"file" : "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
+			"file" : "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule"
 		},
 		{
-			"file" : "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
+			"file" : "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule"
 		},
 		{
-			"file" : "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
+			"file" : "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule"
 		},
 		{
-			"file" : "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
+			"file" : "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule"
 		},
 		{
-			"file" : "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
+			"file" : "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule"
 		},
 		{
-			"file" : "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
+			"file" : "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule"
 		}
 	],
 	"target" : 

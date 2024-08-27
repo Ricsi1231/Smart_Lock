@@ -4,19 +4,19 @@
 cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
-  "/home/nagyrichard/ESP/esp-idf/components/bootloader/subproject"
-  "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader"
-  "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix"
-  "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/tmp"
-  "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp"
-  "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src"
-  "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp"
+  "/home/studiopresent/ESP/esp-idf/components/bootloader/subproject"
+  "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader"
+  "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix"
+  "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/tmp"
+  "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp"
+  "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src"
+  "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp"
 )
 
 set(configSubDirs )
 foreach(subDir IN LISTS configSubDirs)
-    file(MAKE_DIRECTORY "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
+    file(MAKE_DIRECTORY "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp/${subDir}")
 endforeach()
 if(cfgdir)
-  file(MAKE_DIRECTORY "/home/nagyrichard/Documents/Smart_Lock/Firmware/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
+  file(MAKE_DIRECTORY "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader-prefix/src/bootloader-stamp${cfgdir}") # cfgdir has leading slash
 endif()

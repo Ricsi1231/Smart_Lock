@@ -24770,10 +24770,7 @@
                                         "help": "This config helps to set the interrupt priority level for the AES peripheral.\nValue 0 (default) means that there is no preference regarding the interrupt\npriority level and any level from 1 to 3 can be selected (based on the availability).\nNote: Higher value indicates high interrupt priority.",
                                         "id": "MBEDTLS_AES_INTERRUPT_LEVEL",
                                         "name": "MBEDTLS_AES_INTERRUPT_LEVEL",
-                                        "range": [
-                                            0,
-                                            3
-                                        ],
+                                        "range": null,
                                         "title": "AES hardware interrupt level",
                                         "type": "int"
                                     }
@@ -24835,10 +24832,7 @@
                                         "help": "This config helps to set the interrupt priority level for the MPI peripheral.\nValue 0 (default) means that there is no preference regarding the interrupt\npriority level and any level from 1 to 3 can be selected (based on the availability).\nNote: Higher value indicates high interrupt priority.",
                                         "id": "MBEDTLS_MPI_INTERRUPT_LEVEL",
                                         "name": "MBEDTLS_MPI_INTERRUPT_LEVEL",
-                                        "range": [
-                                            0,
-                                            3
-                                        ],
+                                        "range": null,
                                         "title": "MPI hardware interrupt level",
                                         "type": "int"
                                     }
@@ -28586,6 +28580,187 @@
                 "depends_on": null,
                 "id": "component-config-wi-fi-provisioning-manager",
                 "title": "Wi-Fi Provisioning Manager",
+                "type": "menu"
+            },
+            {
+                "children": [
+                    {
+                        "children": [
+                            {
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice ZB_DEVICE_TYPE>",
+                                        "help": "Select this to enable Zigbee Coordinator or Router.",
+                                        "id": "ZB_ZCZR",
+                                        "name": "ZB_ZCZR",
+                                        "range": null,
+                                        "title": "Zigbee Coordinator or Router device",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice ZB_DEVICE_TYPE>",
+                                        "help": "Select this to enable Zigbee End Device.",
+                                        "id": "ZB_ZED",
+                                        "name": "ZB_ZED",
+                                        "range": null,
+                                        "title": "Zigbee End Device",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "SOC_IEEE802154_SUPPORTED && <choice ZB_DEVICE_TYPE>",
+                                        "help": "Select this to enable Zigbee Green Power Device.",
+                                        "id": "ZB_ZGPD",
+                                        "name": "ZB_ZGPD",
+                                        "range": null,
+                                        "title": "Zigbee Green power device",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice ZB_DEVICE_TYPE>",
+                                        "help": "Select this to enable Zigbee Radio Only device which can only forward 802.15.4 packets to the host.\nThe Zigbee stack will be run on the host SoC.",
+                                        "id": "ZB_RCP",
+                                        "name": "ZB_RCP",
+                                        "range": null,
+                                        "title": "Zigbee Radio Co-processor device",
+                                        "type": "bool"
+                                    }
+                                ],
+                                "depends_on": "ZB_ENABLED",
+                                "help": "Configure the Zigbee device type",
+                                "id": "component-config-zigbee-zigbee-enable-configure-the-zigbee-device-type",
+                                "name": "ZB_DEVICE_TYPE",
+                                "title": "Configure the Zigbee device type",
+                                "type": "choice"
+                            },
+                            {
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice ZB_RADIO_TYPE>",
+                                        "help": "Select this to use the native 15.4 radio.",
+                                        "id": "ZB_RADIO_NATIVE",
+                                        "name": "ZB_RADIO_NATIVE",
+                                        "range": null,
+                                        "title": "Native 15.4 radio",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice ZB_RADIO_TYPE>",
+                                        "help": "Select this to connect to a Radio Co-Processor via UART.",
+                                        "id": "ZB_RADIO_MACSPLIT_UART",
+                                        "name": "ZB_RADIO_MACSPLIT_UART",
+                                        "range": null,
+                                        "title": "Connect to 15.4 radio via UART",
+                                        "type": "bool"
+                                    }
+                                ],
+                                "depends_on": "ZB_ENABLED",
+                                "help": null,
+                                "id": "component-config-zigbee-zigbee-enable-configure-the-zigbee-radio-type",
+                                "name": "ZB_RADIO_TYPE",
+                                "title": "Configure the Zigbee radio type",
+                                "type": "choice"
+                            },
+                            {
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "depends_on": "(ZB_ZCZR || ZB_ZED) && ZB_ENABLED",
+                                        "help": "when enable R22, enable zb_console_monitor input and other R22 test related function included.",
+                                        "id": "ZB_R22_ENABLE",
+                                        "name": "ZB_R22_ENABLE",
+                                        "range": null,
+                                        "title": "Zigbee R22 test enable",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "(ZB_ZCZR || ZB_ZGPD) && SOC_IEEE802154_SUPPORTED && ZB_ENABLED",
+                                        "help": "when enable green power, example would support as green power proxy(zczr default enabled), green power combo or just green power device.",
+                                        "id": "ZB_GP_ENABLED",
+                                        "name": "ZB_GP_ENABLED",
+                                        "range": null,
+                                        "title": "Zigbee Green Power enable",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "(ZB_ZCZR || ZB_ZED) && ZB_ENABLED",
+                                        "help": null,
+                                        "id": "ZB_SNIFFER_ENABLE",
+                                        "name": "ZB_SNIFFER_ENABLE",
+                                        "range": null,
+                                        "title": "Zigbee Sniffer enable",
+                                        "type": "bool"
+                                    }
+                                ],
+                                "depends_on": "ZB_ENABLED",
+                                "id": "component-config-zigbee-zigbee-enable-zigbee-example",
+                                "title": "Zigbee Example",
+                                "type": "menu"
+                            },
+                            {
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "depends_on": "ZB_ENABLED",
+                                        "help": "Setting Zigbee stack trace enable.",
+                                        "id": "ESP_ZB_TRACE_ENABLE",
+                                        "name": "ESP_ZB_TRACE_ENABLE",
+                                        "range": null,
+                                        "title": "Zigbee Trace Enable",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "ZB_ENABLED && ZB_ENABLED",
+                                        "help": "Setting Zigbee stack trace level, normally if level set -1, it will disable trace.",
+                                        "id": "ZB_TRACE_LEVEL",
+                                        "name": "ZB_TRACE_LEVEL",
+                                        "range": [
+                                            -1,
+                                            4
+                                        ],
+                                        "title": "Zigbee stack trace level",
+                                        "type": "int"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "ZB_ENABLED && ZB_ENABLED",
+                                        "help": "Setting Zigbee stack trace mask, mask please refer to `zb_trace.h`.",
+                                        "id": "ZB_TRACE_MASK",
+                                        "name": "ZB_TRACE_MASK",
+                                        "range": [
+                                            0,
+                                            1073741823
+                                        ],
+                                        "title": "Zigbee stack trace mask",
+                                        "type": "hex"
+                                    }
+                                ],
+                                "depends_on": "ZB_ENABLED",
+                                "id": "component-config-zigbee-zigbee-enable-zigbee-trace-log-option",
+                                "title": "Zigbee trace log option",
+                                "type": "menu"
+                            }
+                        ],
+                        "depends_on": null,
+                        "help": "Select this option to enable Zigbee and show the submenu with Zigbee configuration choices.",
+                        "id": "ZB_ENABLED",
+                        "name": "ZB_ENABLED",
+                        "range": null,
+                        "title": "Zigbee Enable",
+                        "type": "bool"
+                    }
+                ],
+                "depends_on": null,
+                "id": "component-config-zigbee",
+                "title": "Zigbee",
                 "type": "menu"
             }
         ],

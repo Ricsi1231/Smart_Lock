@@ -1,4 +1,4 @@
-/* * Data converted from /home/nagyrichard/Documents/Smart_Lock/Firmware/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from /home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 #if !defined (__APPLE__) && !defined (__linux__)

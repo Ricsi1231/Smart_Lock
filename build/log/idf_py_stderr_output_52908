@@ -1,9 +1,0 @@
-CMake Error at /home/nagyrichard/ESP/esp-idf/tools/cmake/component.cmake:314 (message):
-  Include directory
-  '/home/nagyrichard/Documents/Smart_Lock/Firmware/components/include' is not
-  a directory.
-Call Stack (most recent call first):
-  /home/nagyrichard/ESP/esp-idf/tools/cmake/component.cmake:482 (__component_add_include_dirs)
-  components/CMakeLists.txt:1 (idf_component_register)
-
-

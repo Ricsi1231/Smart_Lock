@@ -4,6 +4,6 @@
 
 method=source_dir
 command=
-source_dir=/home/nagyrichard/ESP/esp-idf/components/bootloader/subproject
+source_dir=/home/studiopresent/ESP/esp-idf/components/bootloader/subproject
 work_dir=
 
