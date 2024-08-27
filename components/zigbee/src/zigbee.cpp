@@ -59,14 +59,11 @@ namespace ZigbeeComponent
         }
     }
 
-    esp_err_t Zigbee::attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message)
-    {
+    esp_err_t Zigbee::attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message) {
         esp_err_t error_state = ESP_OK;
 
-        if (message->info.dst_endpoint == HA_ESP_LOCK_ENDPOINT && message->info.cluster == ESP_ZB_ZCL_CLUSTER_ID_ON_OFF)
-        {
-            if (message->attribute.id == ESP_ZB_ZCL_ATTR_ON_OFF_ON_OFF_ID && message->attribute.data.type == ESP_ZB_ZCL_ATTR_TYPE_BOOL)
-            {
+        if (message->info.dst_endpoint == HA_ESP_LOCK_ENDPOINT && message->info.cluster == ESP_ZB_ZCL_CLUSTER_ID_ON_OFF) {
+            if (message->attribute.id == ESP_ZB_ZCL_ATTR_ON_OFF_ON_OFF_ID && message->attribute.data.type == ESP_ZB_ZCL_ATTR_TYPE_BOOL) {
                 vTaskDelay(10);
             }
         }
@@ -93,7 +90,7 @@ namespace ZigbeeComponent
     }
 
     esp_err_t zigbeeAttributeHandler(Zigbee *zigbeeRef) {
-        esp_zb_core_action_handler_register(zigbeeRef->action_handler);
+        
 
         return ESP_OK;
     }
@@ -107,7 +104,8 @@ namespace ZigbeeComponent
         esp_zb_ep_list_t *ep_list = esp_zb_on_off_light_ep_create(HA_ESP_LOCK_ENDPOINT, &on_off_cfg);
 
         esp_zb_device_register(ep_list);
-        zigbeeAttributeHandler(this);
+        //zigbeeAttributeHandler(this);
+        esp_zb_core_action_handler_register(zigbeeRef->action_handler);
         esp_zb_set_primary_network_channel_set(ESP_ZB_PRIMARY_CHANNEL_MASK);
 
         ESP_ERROR_CHECK(esp_zb_start(false));
