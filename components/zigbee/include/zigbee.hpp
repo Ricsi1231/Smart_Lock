@@ -35,23 +35,29 @@
 namespace ZigbeeComponent {
     class Zigbee {
         public:
-            explicit Zigbee();
-            virtual ~Zigbee();
+            Zigbee* getInstance() {
+                if(instance == nullptr) {
+                    instance = new Zigbee();
+                }
 
+                return instance;
+            }
+
+            void operator=(const Zigbee&) = delete;
+            Zigbee(Zigbee &other) = delete;
+
+            esp_err_t initialize();
             void rtosTask(void *pvParameter);
-            void init();
 
         private:
-            friend esp_err_t zigbeeAttributeHandler(Zigbee *zigbeeRef);
-
-            void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_sturct);
+            Zigbee* instance;
+            Zigbee();
 
             void start_high_level_commissioning(uint8_t mask);
-            esp_err_t action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message);
+            void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_sturct);
             esp_err_t attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message);
+            esp_err_t action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message);
 
             const char *TAG = "ESP32_LOCK_UART";
-
-            //friend class signalCallbackHook;
-    };
+        };
 }
