@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "main",
-    "project_version":    "c1a203b-dirty",
+    "project_version":    "513ef34-dirty",
     "project_path":       "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock",
     "idf_path":           "/home/studiopresent/ESP/esp-idf",
     "build_dir":          "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build",
