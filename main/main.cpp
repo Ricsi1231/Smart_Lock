@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "lock_driver.hpp"
 #include "zigbee.hpp"
-#include "esp_zigbee_core.h"
 
 #define UART_PORT (UART_NUM_1)
 #define UART_RX_PIN (GPIO_NUM_4)
@@ -15,6 +14,4 @@ extern "C" void app_main(void) {
     ZigbeeComponent::Zigbee::init();
     
     Lock.open();
-
-    xTaskCreate(ZigbeeComponent::Zigbee::rtosTask, "Zigbee_main", 4096, NULL, 5, NULL);
 }

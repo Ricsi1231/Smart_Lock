@@ -8,9 +8,9 @@ namespace ZigbeeComponent {
         ESP_ERROR_CHECK(esp_zb_bdb_start_top_level_commissioning(mask));
     }
 
-    void Zigbee::esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_sturct) {
-        uint32_t *p_signal = signal_sturct->p_app_signal;
-        esp_err_t err_status = signal_sturct->esp_err_status;
+    void Zigbee::esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s) {
+        uint32_t *p_signal = signal_s->p_app_signal;
+        esp_err_t err_status = signal_s->esp_err_status;
         esp_zb_app_signal_type_t sig_type = static_cast<esp_zb_app_signal_type_t>(*p_signal);
 
         switch (sig_type) {
@@ -81,7 +81,7 @@ namespace ZigbeeComponent {
         esp_zb_ep_list_t  *ep_list = esp_zb_on_off_light_ep_create(HA_ESP_LOCK_ENDPOINT, &on_off_cfg);
 
         esp_zb_device_register(ep_list);
-        esp_zb_core_action_handler_register(ZigbeeComponent::Zigbee::action_handler);
+        esp_zb_core_action_handler_register(action_handler);
         esp_zb_set_primary_network_channel_set(ESP_ZB_PRIMARY_CHANNEL_MASK);
 
         ESP_ERROR_CHECK(esp_zb_start(false));
@@ -99,3 +99,4 @@ namespace ZigbeeComponent {
         ESP_ERROR_CHECK(esp_zb_platform_config(&zigbee_config));
     }
 }
+

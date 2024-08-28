@@ -47,7 +47,7 @@ namespace ZigbeeComponent {
 
         private:
             static void start_high_level_commissioning(uint8_t mask);
-            static void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_sturct);
+            static void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s);
             static esp_err_t attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message);
             static esp_err_t action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message);
     };

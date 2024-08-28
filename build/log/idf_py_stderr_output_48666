@@ -1,0 +1,1 @@
+ninja: error: '/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/components/zigbee/src/zigbee_core.c', needed by 'esp-idf/zigbee/CMakeFiles/__idf_zigbee.dir/src/zigbee_core.c.obj', missing and no known rule to make it

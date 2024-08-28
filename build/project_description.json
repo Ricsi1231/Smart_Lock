@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "main",
-    "project_version":    "513ef34-dirty",
+    "project_version":    "75c2176-dirty",
     "project_path":       "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock",
     "idf_path":           "/home/studiopresent/ESP/esp-idf",
     "build_dir":          "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build",
@@ -1206,9 +1206,9 @@
             "type": "LIBRARY",
             "lib": "__idf_main",
             "reqs": [ "lock_driver", "zigbee" ],
-            "priv_reqs": [ "espressif__esp-zboss-lib", "espressif__esp-zigbee-lib" ],
+            "priv_reqs": [],
             "managed_reqs": [],
-            "managed_priv_reqs": [ "espressif__esp-zboss-lib", "espressif__esp-zigbee-lib" ],
+            "managed_priv_reqs": [],
             "file": "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/esp-idf/main/libmain.a",
             "sources": [ "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/main/main.cpp" ],
             "include_dirs": [ "." ]
@@ -2821,9 +2821,9 @@
             "dir": "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/main",
             "lib": "__idf_main",
             "reqs": [ "lock_driver", "zigbee" ],
-            "priv_reqs": [ "espressif__esp-zboss-lib", "espressif__esp-zigbee-lib" ],
+            "priv_reqs": [],
             "managed_reqs": [],
-            "managed_priv_reqs": [ "espressif__esp-zboss-lib", "espressif__esp-zigbee-lib" ],
+            "managed_priv_reqs": [],
             "include_dirs": [ "." ]
         },
         "lock_driver": {

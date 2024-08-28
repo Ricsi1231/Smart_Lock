@@ -1,0 +1,18 @@
+zigbee-e0991facf5-75c2176-1.0.9-2024-08-28 11:34:14 UTC
+CMake Warning at /home/studiopresent/ESP/esp-idf/tools/cmake/component.cmake:270 (message):
+  SRCS and SRC_DIRS are both specified; ignoring SRC_DIRS.
+Call Stack (most recent call first):
+  /home/studiopresent/ESP/esp-idf/tools/cmake/component.cmake:444 (__component_add_sources)
+  components/zigbee/CMakeLists.txt:1 (idf_component_register)
+
+
+CMake Error at /home/studiopresent/ESP/esp-idf/tools/cmake/component.cmake:314 (message):
+  Include directory
+  '/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++
+  implementation/common/zcl_utility/include' is not a directory.
+Call Stack (most recent call first):
+  /home/studiopresent/ESP/esp-idf/tools/cmake/component.cmake:482 (__component_add_include_dirs)
+  components/zigbee/CMakeLists.txt:1 (idf_component_register)
+
+
+ninja: error: rebuilding 'build.ninja': subcommand failed
