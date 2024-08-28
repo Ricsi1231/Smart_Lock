@@ -33,12 +33,14 @@
     }
 
 namespace ZigbeeComponent {
+    const char *TAG = "ESP32_LOCK_UART";
+
     class Zigbee {
         public:
             explicit Zigbee();
             virtual ~Zigbee();
 
-            void rtosTask(void *pvParameter);
+            static void rtosTask(void *pvParameter);
             void init();
 
         private:
@@ -49,9 +51,15 @@ namespace ZigbeeComponent {
             void start_high_level_commissioning(uint8_t mask);
             esp_err_t action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message);
             esp_err_t attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message);
+            friend class ZigbeeConfig;
+    };
 
-            const char *TAG = "ESP32_LOCK_UART";
-
-            //friend class signalCallbackHook;
+    class ZigbeeConfig {
+        public:
+            ZigbeeConfig(Zigbee& zigbeeInstance);
+            esp_err_t registerActionHandler();
+        
+        private:
+            Zigbee *instance;
     };
 }

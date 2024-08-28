@@ -7,11 +7,11 @@
 #define UART_TX_PIN (GPIO_NUM_5)
 
 LockSystem::Lock Lock;
-ZigbeeComponent::Zigbee Zigbee;
+ZigbeeComponent::Zigbee zigbee;
 
 extern "C" void app_main(void) {
     Lock.initalize(UART_PORT, UART_RX_PIN, UART_TX_PIN);
     Lock.open();
 
-    Zigbee.init();
+    xTaskCreate(ZigbeeComponent::Zigbee::rtosTask, "Zigbee_main", 4096, static_cast<void*>(&zigbee), 5, NULL);
 }
