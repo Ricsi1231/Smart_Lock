@@ -3,6 +3,22 @@
 #include "zigbee.hpp"
 #include "esp_zigbee_core.h"
 
+#define UART_PORT (UART_NUM_1)
+#define UART_RX_PIN (GPIO_NUM_4)
+#define UART_TX_PIN (GPIO_NUM_5)
+
+LockSystem::Lock Lock;
+
+void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s);
+
+extern "C" void app_main(void) {
+    ZigbeeComponent::Zigbee::init();
+    Lock.initalize(UART_PORT, UART_RX_PIN, UART_TX_PIN);
+    
+    Lock.open();
+    xTaskCreate(ZigbeeComponent::Zigbee::rtosTask, "Zigbee_main", 4096, NULL, 5, NULL);
+}
+
 void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s) {
         uint32_t *p_signal = signal_s->p_app_signal;
         esp_err_t err_status = signal_s->esp_err_status;
@@ -41,15 +57,3 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s) {
             break;
         }
     }
-
-#define UART_PORT (UART_NUM_1)
-#define UART_RX_PIN (GPIO_NUM_4)
-#define UART_TX_PIN (GPIO_NUM_5)
-
-LockSystem::Lock Lock;
-
-extern "C" void app_main(void) {
-    ZigbeeComponent::Zigbee::init();
-    
-    xTaskCreate(ZigbeeComponent::Zigbee::rtosTask, "Zigbee_main", 4096, NULL, 5, NULL);
-}
