@@ -1,0 +1,1 @@
+ninja: error: '/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/components/zigbee/src/esp_zb_app_signal_handler.c', needed by 'esp-idf/zigbee/CMakeFiles/__idf_zigbee.dir/src/esp_zb_app_signal_handler.c.obj', missing and no known rule to make it

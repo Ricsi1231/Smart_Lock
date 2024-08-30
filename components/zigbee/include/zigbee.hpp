@@ -3,6 +3,7 @@
 #include <iostream>
 #include "nvs_flash.h"
 #include "esp_zigbee_core.h"
+#include "lock_driver.hpp"
 
 #define INSTALLCODE_POLICY_ENABLE       false   
 #define ED_AGING_TIMEOUT                ESP_ZB_ED_AGING_TIMEOUT_64MIN
@@ -41,8 +42,6 @@ namespace ZigbeeComponent {
             Zigbee& operator=(const Zigbee&) = delete;
             Zigbee(Zigbee&&) = delete;
             Zigbee& operator=(Zigbee&&) = delete;
-
-            friend static void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s);
 
             static void rtosTask(void *pvParameter);
             static void init();

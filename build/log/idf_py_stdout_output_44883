@@ -1,7 +1,0 @@
-[0/1] Re-running CMake...
--- Building ESP-IDF components for target esp32c6
-Manifest files have changed, solving dependencies.
-.....HINT: Please check manifest file of the following component(s): zigbee
--- Configuring incomplete, errors occurred!
-FAILED: build.ninja 
-/usr/bin/cmake --regenerate-during-build -S"/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock" -B"/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build"
