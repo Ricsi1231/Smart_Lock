@@ -13,10 +13,7 @@ namespace ZigbeeComponent {
 
         if(message->info.dst_endpoint == HA_ESP_LOCK_ENDPOINT && message->info.cluster == ESP_ZB_HA_DOOR_LOCK_DEVICE_ID && message->attribute.id == ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_STATE_ID) {
             if(message->attribute.data.type == ESP_ZB_ZCL_CMD_DOOR_LOCK_LOCK_DOOR) {
-                
-            }
-            else if(message->attribute.data.type == ESP_ZB_ZCL_CMD_DOOR_LOCK_UNLOCK_DOOR) {
-                
+                //Lock.open();
             }
             else {
                 ESP_LOGI(TAG, "Wrong Lock command");

@@ -50,5 +50,7 @@ namespace ZigbeeComponent {
             static void start_high_level_commissioning(uint8_t mask);
             static esp_err_t attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message);
             static esp_err_t action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message);
+
+            LockSystem::Lock Lock;
     };
 }

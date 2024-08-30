@@ -49,10 +49,7 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s) {
 LockSystem::Lock Lock;
 
 extern "C" void app_main(void) {
-
-    Lock.initalize(UART_PORT, UART_RX_PIN, UART_TX_PIN);
     ZigbeeComponent::Zigbee::init();
     
-    Lock.open();
     xTaskCreate(ZigbeeComponent::Zigbee::rtosTask, "Zigbee_main", 4096, NULL, 5, NULL);
 }
