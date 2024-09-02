@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include "lock_driver.hpp"
 #include "zigbee.hpp"
@@ -16,8 +15,10 @@ extern "C" void app_main(void) {
     const char *TAG = "ESP32_LOCK_UART";
 
     Lock.initalize(UART_PORT, UART_RX_PIN, UART_TX_PIN);
-    
+
     ZigbeeComponent::Zigbee::init();
+    
+    //Lock.open();
     xTaskCreate(ZigbeeComponent::Zigbee::rtosTask, "Zigbee_main", 4096, NULL, 5, NULL);
 }
 
@@ -27,6 +28,9 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s) {
         esp_zb_app_signal_type_t sig_type = static_cast<esp_zb_app_signal_type_t>(*p_signal);
 
         const char *TAG = "ESP32_LOCK_UART";
+        
+        ESP_LOGI(TAG, "Signal type: %d", sig_type);
+        //sig_type = ESP_ZB_BDB_SIGNAL_STEERING;
 
         switch (sig_type) {
             case ESP_ZB_ZDO_SIGNAL_SKIP_STARTUP:
@@ -55,11 +59,11 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s) {
                         extended_pan_id[3], extended_pan_id[2], extended_pan_id[1], extended_pan_id[0],
                         esp_zb_get_pan_id(), esp_zb_get_current_channel(), esp_zb_get_short_address());
                 }
-            break;
+        break;
 
-            default:
-                ESP_LOGI(TAG, "ZDO signal: %s (0x%x), status: %s", esp_zb_zdo_signal_to_string(sig_type), sig_type,
-                        esp_err_to_name(err_status));
-            break;
-        }
+        default:
+            ESP_LOGI(TAG, "ZDO signal: %s (0x%x), status: %s", esp_zb_zdo_signal_to_string(sig_type), sig_type,
+                    esp_err_to_name(err_status));
+        break;
     }
+}

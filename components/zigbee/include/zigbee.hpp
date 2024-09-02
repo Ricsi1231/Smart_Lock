@@ -9,7 +9,7 @@
 #define ED_AGING_TIMEOUT                ESP_ZB_ED_AGING_TIMEOUT_64MIN
 #define ED_KEEP_ALIVE                   3000    
 #define HA_ESP_LOCK_ENDPOINT            10     
-#define ESP_ZB_PRIMARY_CHANNEL_MASK     0x07FFF800  
+#define ESP_ZB_PRIMARY_CHANNEL_MASK     ESP_ZB_TRANSCEIVER_ALL_CHANNELS_MASK  
 
 #define ESP_ZB_ZED_CONFIG()                                         \
     {                                                               \

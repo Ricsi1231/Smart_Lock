@@ -5,9 +5,16 @@ Bootloader binary size 0x5500 bytes. 0x2b00 bytes (34%) free.
 [3/10] Completed 'bootloader'
 [4/10] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/main.cpp.obj
 /home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/main/main.cpp: In function 'void app_main()':
-/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/main/main.cpp:16:17: warning: unused variable 'TAG' [-Wunused-variable]
-   16 |     const char *TAG = "ESP32_LOCK_UART";
+/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/main/main.cpp:15:17: warning: unused variable 'TAG' [-Wunused-variable]
+   15 |     const char *TAG = "ESP32_LOCK_UART";
       |                 ^~~
+/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/main/main.cpp: In function 'void esp_zb_app_signal_handler(esp_zb_app_signal_t*)':
+/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/main/main.cpp:30:14: warning: unused variable 'skipStartUpcheck' [-Wunused-variable]
+   30 |         bool skipStartUpcheck = false;
+      |              ^~~~~~~~~~~~~~~~
+/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/main/main.cpp:31:14: warning: unused variable 'deviceReboot' [-Wunused-variable]
+   31 |         bool deviceReboot = false;
+      |              ^~~~~~~~~~~~
 [5/10] Linking C static library esp-idf/main/libmain.a
 [6/10] Generating ld/sections.ld
 [7/10] Linking CXX executable main.elf
@@ -40,34 +47,34 @@ Flash will be erased from 0x00000000 to 0x00005fff...
 Flash will be erased from 0x00010000 to 0x00096fff...
 Flash will be erased from 0x00008000 to 0x00008fff...
 SHA digest in image updated
-Compressed 21760 bytes to 13128...
+Compressed 21760 bytes to 13127...
 Writing at 0x00000000... (100 %)
-Wrote 21760 bytes (13128 compressed) at 0x00000000 in 0.6 seconds (effective 298.5 kbit/s)...
+Wrote 21760 bytes (13127 compressed) at 0x00000000 in 0.6 seconds (effective 296.6 kbit/s)...
 Hash of data verified.
-Compressed 551312 bytes to 290444...
+Compressed 551312 bytes to 290449...
 Writing at 0x00010000... (5 %)
-Writing at 0x0001dc86... (11 %)
-Writing at 0x0002454b... (16 %)
-Writing at 0x0002b016... (22 %)
-Writing at 0x000327d7... (27 %)
-Writing at 0x0003a5ca... (33 %)
-Writing at 0x00042227... (38 %)
-Writing at 0x00049828... (44 %)
-Writing at 0x00050dd6... (50 %)
-Writing at 0x000582fa... (55 %)
-Writing at 0x0005edff... (61 %)
-Writing at 0x00067468... (66 %)
-Writing at 0x0006e73a... (72 %)
-Writing at 0x00075be6... (77 %)
-Writing at 0x0007d5d2... (83 %)
-Writing at 0x000841fa... (88 %)
-Writing at 0x00089fdf... (94 %)
-Writing at 0x00090d65... (100 %)
-Wrote 551312 bytes (290444 compressed) at 0x00010000 in 6.6 seconds (effective 664.7 kbit/s)...
+Writing at 0x0001dc69... (11 %)
+Writing at 0x00024558... (16 %)
+Writing at 0x0002b018... (22 %)
+Writing at 0x000327e0... (27 %)
+Writing at 0x0003a5dc... (33 %)
+Writing at 0x0004221f... (38 %)
+Writing at 0x00049829... (44 %)
+Writing at 0x00050dd8... (50 %)
+Writing at 0x00058301... (55 %)
+Writing at 0x0005ee0c... (61 %)
+Writing at 0x0006746d... (66 %)
+Writing at 0x0006e745... (72 %)
+Writing at 0x00075be2... (77 %)
+Writing at 0x0007d5d1... (83 %)
+Writing at 0x00084205... (88 %)
+Writing at 0x00089fe3... (94 %)
+Writing at 0x00090d56... (100 %)
+Wrote 551312 bytes (290449 compressed) at 0x00010000 in 6.6 seconds (effective 664.3 kbit/s)...
 Hash of data verified.
 Compressed 3072 bytes to 136...
 Writing at 0x00008000... (100 %)
-Wrote 3072 bytes (136 compressed) at 0x00008000 in 0.0 seconds (effective 540.4 kbit/s)...
+Wrote 3072 bytes (136 compressed) at 0x00008000 in 0.0 seconds (effective 512.0 kbit/s)...
 Hash of data verified.
 
 Leaving...
