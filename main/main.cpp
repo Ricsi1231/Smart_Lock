@@ -29,10 +29,10 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s) {
 
         const char *TAG = "ESP32_LOCK_UART";
         
+        sig_type = ESP_ZB_BDB_SIGNAL_STEERING;
         ESP_LOGI(TAG, "Signal type: %d", sig_type);
-        //sig_type = ESP_ZB_BDB_SIGNAL_STEERING;
 
-        switch (sig_type) {
+        switch(sig_type) {
             case ESP_ZB_ZDO_SIGNAL_SKIP_STARTUP:
                 ESP_LOGI(TAG, "Zigbee stack is initialized");
                 ESP_ERROR_CHECK(esp_zb_bdb_start_top_level_commissioning(ESP_ZB_BDB_MODE_INITIALIZATION));
