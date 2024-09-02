@@ -9,7 +9,7 @@
 #define ED_AGING_TIMEOUT                ESP_ZB_ED_AGING_TIMEOUT_64MIN
 #define ED_KEEP_ALIVE                   3000    
 #define HA_ESP_LOCK_ENDPOINT            10     
-#define ESP_ZB_PRIMARY_CHANNEL_MASK     ESP_ZB_TRANSCEIVER_ALL_CHANNELS_MASK  
+#define ESP_ZB_PRIMARY_CHANNEL_MASK     0x07FFF800  
 
 #define ESP_ZB_ZED_CONFIG()                                         \
     {                                                               \
@@ -50,7 +50,5 @@ namespace ZigbeeComponent {
             static void start_high_level_commissioning(uint8_t mask);
             static esp_err_t attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message);
             static esp_err_t action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message);
-
-            LockSystem::Lock Lock;
     };
 }

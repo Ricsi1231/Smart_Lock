@@ -1,3 +1,4 @@
+
 #include "zigbee.hpp"
 #include "ha/esp_zigbee_ha_standard.h"
 
@@ -12,7 +13,7 @@ namespace ZigbeeComponent {
         esp_err_t error_state = ESP_OK;
 
         if(message->info.dst_endpoint == HA_ESP_LOCK_ENDPOINT && message->info.cluster == ESP_ZB_HA_DOOR_LOCK_DEVICE_ID && message->attribute.id == ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_STATE_ID) {
-            if(message->attribute.data.type == ESP_ZB_ZCL_CMD_DOOR_LOCK_LOCK_DOOR) {
+            if(message->attribute.data.type == ESP_ZB_ZCL_CMD_DOOR_LOCK_UNLOCK_DOOR) {
                 
             }
             else {
@@ -43,8 +44,8 @@ namespace ZigbeeComponent {
         esp_zb_cfg_t zigbee_network_config = ESP_ZB_ZED_CONFIG();
         esp_zb_init(&zigbee_network_config);
 
-        esp_zb_on_off_light_cfg_t on_off_cfg = ESP_ZB_DEFAULT_ON_OFF_LIGHT_CONFIG();
-        esp_zb_ep_list_t  *ep_list = esp_zb_on_off_light_ep_create(HA_ESP_LOCK_ENDPOINT, &on_off_cfg);
+        esp_zb_door_lock_cfg_t on_off_cfg = ESP_ZB_DEFAULT_DOOR_LOCK_CONFIG();
+        esp_zb_ep_list_t  *ep_list = esp_zb_door_lock_ep_create(HA_ESP_LOCK_ENDPOINT, &on_off_cfg);
 
         esp_zb_device_register(ep_list);
         esp_zb_core_action_handler_register(action_handler);
@@ -65,4 +66,3 @@ namespace ZigbeeComponent {
         ESP_ERROR_CHECK(esp_zb_platform_config(&zigbee_config));
     }
 }
-
