@@ -1,0 +1,79 @@
+[1/10] Performing build step for 'bootloader'
+[1/1] cd "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/bootloader/esp-idf/esptool_py" && /home/studiopresent/.espressif/python_env/idf5.3_py3.12_env/bin/python /home/studiopresent/ESP/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++\ implementation/Smart_Lock/build/bootloader/bootloader.bin
+Bootloader binary size 0x5500 bytes. 0x2b00 bytes (34%) free.
+[2/10] No install step for 'bootloader'
+[3/10] Completed 'bootloader'
+[4/10] Building CXX object esp-idf/zigbee/CMakeFiles/__idf_zigbee.dir/src/zigbee.cpp.obj
+/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/components/zigbee/src/zigbee.cpp: In static member function 'static esp_err_t ZigbeeComponent::Zigbee::attribute_handler(const esp_zb_zcl_set_attr_value_message_t*)':
+/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/components/zigbee/src/zigbee.cpp:15:45: warning: comparison between 'const enum esp_zb_zcl_attr_type_t' and 'enum esp_zb_zcl_door_lock_cmd_id_t' [-Wenum-compare]
+   15 |             if(message->attribute.data.type == ESP_ZB_ZCL_CMD_DOOR_LOCK_UNLOCK_DOOR) {
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/components/zigbee/src/zigbee.cpp: In static member function 'static void ZigbeeComponent::Zigbee::init()':
+/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/components/zigbee/src/zigbee.cpp:64:9: warning: missing initializer for member 'esp_zb_radio_config_t::radio_uart_config' [-Wmissing-field-initializers]
+   64 |         };
+      |         ^
+/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/components/zigbee/src/zigbee.cpp:64:9: warning: missing initializer for member 'esp_zb_host_config_t::host_uart_config' [-Wmissing-field-initializers]
+[5/10] Linking C static library esp-idf/zigbee/libzigbee.a
+[6/10] Generating ld/sections.ld
+[7/10] Linking CXX executable main.elf
+[8/10] Generating binary image from built executable
+esptool.py v4.8.dev4
+Creating esp32c6 image...
+Merged 1 ELF section
+Successfully created esp32c6 image.
+Generated /home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/main.bin
+[9/10] cd "/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build/esp-idf/esptool_py" && /home/studiopresent/.espressif/python_env/idf5.3_py3.12_env/bin/python /home/studiopresent/ESP/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++\ implementation/Smart_Lock/build/partition_table/partition-table.bin /home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++\ implementation/Smart_Lock/build/main.bin
+main.bin binary size 0x86ad0 bytes. Smallest app partition is 0xe1000 bytes. 0x5a530 bytes (40%) free.
+[9/10] cd /home/studiopresent/ESP/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/studiopresent/ESP/esp-idf -D "SERIAL_TOOL=/home/studiopresent/.espressif/python_env/idf5.3_py3.12_env/bin/python;;/home/studiopresent/ESP/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32c6" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D "WORKING_DIRECTORY=/home/studiopresent/IoT/Smart_lock/Firmware/Lock_Controller/C++ implementation/Smart_Lock/build" -P /home/studiopresent/ESP/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32c6 -p /dev/ttyUSB0 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x0 bootloader/bootloader.bin 0x10000 main.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.8.dev4
+Serial port /dev/ttyUSB0
+Connecting....
+Chip is ESP32-C6 (QFN40) (revision v0.0)
+Features: WiFi 6, BT 5, IEEE802.15.4
+Crystal is 40MHz
+MAC: 40:4c:ca:ff:fe:4d:ba:9c
+BASE MAC: 40:4c:ca:4d:ba:9c
+MAC_EXT: ff:fe
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00000000 to 0x00005fff...
+Flash will be erased from 0x00010000 to 0x00096fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+SHA digest in image updated
+Compressed 21760 bytes to 13127...
+Writing at 0x00000000... (100 %)
+Wrote 21760 bytes (13127 compressed) at 0x00000000 in 0.6 seconds (effective 298.7 kbit/s)...
+Hash of data verified.
+Compressed 551632 bytes to 290569...
+Writing at 0x00010000... (5 %)
+Writing at 0x0001dc8d... (11 %)
+Writing at 0x0002457a... (16 %)
+Writing at 0x0002b034... (22 %)
+Writing at 0x0003280f... (27 %)
+Writing at 0x0003a5c2... (33 %)
+Writing at 0x0004227b... (38 %)
+Writing at 0x0004987a... (44 %)
+Writing at 0x00050de5... (50 %)
+Writing at 0x0005834b... (55 %)
+Writing at 0x0005ee90... (61 %)
+Writing at 0x00067529... (66 %)
+Writing at 0x0006e75a... (72 %)
+Writing at 0x00075c72... (77 %)
+Writing at 0x0007d5ef... (83 %)
+Writing at 0x00084262... (88 %)
+Writing at 0x0008a037... (94 %)
+Writing at 0x00090d01... (100 %)
+Wrote 551632 bytes (290569 compressed) at 0x00010000 in 6.7 seconds (effective 663.3 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 136...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (136 compressed) at 0x00008000 in 0.0 seconds (effective 506.6 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

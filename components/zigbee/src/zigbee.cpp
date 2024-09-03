@@ -12,7 +12,7 @@ namespace ZigbeeComponent {
         esp_err_t error_state = ESP_OK;
 
         if(message->info.dst_endpoint == HA_ESP_LOCK_ENDPOINT && message->info.cluster == ESP_ZB_HA_DOOR_LOCK_DEVICE_ID && message->attribute.id == ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_STATE_ID) {
-            if(message->attribute.data.type == ESP_ZB_ZCL_CMD_DOOR_LOCK_LOCK_DOOR) {
+            if(message->attribute.data.type == ESP_ZB_ZCL_CMD_DOOR_LOCK_UNLOCK_DOOR) {
                 
             }
             else {
@@ -26,7 +26,7 @@ namespace ZigbeeComponent {
         esp_err_t Zigbee::action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message) {
         esp_err_t error_status = ESP_OK;
 
-        switch (callback_id) {
+        switch(callback_id) {
             case ESP_ZB_CORE_SET_ATTR_VALUE_CB_ID:
                 error_status = attribute_handler((esp_zb_zcl_set_attr_value_message_t *)message);
             break;
