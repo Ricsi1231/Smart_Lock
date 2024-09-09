@@ -65,4 +65,3 @@ namespace ZigbeeComponent {
         ESP_ERROR_CHECK(esp_zb_platform_config(&zigbee_config));
     }
 }
-

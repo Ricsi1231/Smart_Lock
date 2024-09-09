@@ -1,0 +1,109 @@
+[0;33m--- esp-idf-monitor 1.4.0 on /dev/ttyUSB0 115200 ---[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---[0m
+[0;33m0x40801bcb: lock_acquire_generic at /home/ricsi/esp/esp-idf/components/newlib/locks.c:133
+[0m
+[0;33mStack dump detected[0m
+[0;33m0x4080089e: panic_abort at /home/ricsi/esp/esp-idf/components/esp_system/panic.c:463
+0x40808a66: __ubsan_include at /home/ricsi/esp/esp-idf/components/esp_system/ubsan.c:311
+[0m
+[0;33m0x40800001: _vector_table at /home/ricsi/esp/esp-idf/components/riscv/vectors_intc.S:54
+[0m
+[0;33mFailed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', '/home/ricsi/IoT/Firmware/Smart_Lock/build/main.elf', '-ex', 'target remote | "/home/ricsi/.espressif/python_env/idf5.3_py3.10_env/bin/python" -m esp_idf_panic_decoder --target esp32c6 "/tmp/tmpj00mzjfy"', '-ex', 'bt']' returned non-zero exit status 1.
+b'Traceback (most recent call last):\n  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main\n    return _run_code(code, main_globals, None,\n  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code\n    exec(code, run_globals)\n  File "/home/ricsi/.espressif/python_env/idf5.3_py3.10_env/lib/python3.10/site-packages/esp_idf_panic_decoder/__main__.py", line 4, in <module>\n    main()\n  File "/home/ricsi/.espressif/python_env/idf5.3_py3.10_env/lib/python3.10/site-packages/esp_idf_panic_decoder/gdb_panic_server.py", line 285, in main\n    panic_info = PANIC_OUTPUT_PARSERS[args.target](args.input_file.read())\n  File "/home/ricsi/.espressif/python_env/idf5.3_py3.10_env/lib/python3.10/site-packages/esp_idf_panic_decoder/gdb_panic_server.py", line 150, in parse_idf_riscv_panic_output\n    stack_base_addr, stack_data = get_stack_addr_and_data(res)\n  File "/home/ricsi/.espressif/python_env/idf5.3_py3.10_env/lib/python3.10/site-packages/esp_idf_panic_decoder/gdb_panic_server.py", line 118, in get_stack_addr_and_data\n    assert base_addr == prev_base_addr + bytes_in_line\nAssertionError\nRemote communication error.  Target disconnected: Connection reset by peer.\nNo stack.\n'
+
+[0m
+[0;33m0x4001975a: software_reset_cpu in ROM
+[0m
+[0;33m0x40801bcb: lock_acquire_generic at /home/ricsi/esp/esp-idf/components/newlib/locks.c:133
+[0m
+[0;33mStack dump detected[0m
+[0;33m0x4080089e: panic_abort at /home/ricsi/esp/esp-idf/components/esp_system/panic.c:463
+0x40808a66: __ubsan_include at /home/ricsi/esp/esp-idf/components/esp_system/ubsan.c:311
+[0m
+[0;33m0x40800001: _vector_table at /home/ricsi/esp/esp-idf/components/riscv/vectors_intc.S:54
+[0m
+[0;33m
+Backtrace:
+
+[0m
+[0;33m0x40801bcb: lock_acquire_generic at /home/ricsi/esp/esp-idf/components/newlib/locks.c:133
+[0m
+[0;33mStack dump detected[0m
+[0;33m0x4080089e: panic_abort at /home/ricsi/esp/esp-idf/components/esp_system/panic.c:463
+0x40808a66: __ubsan_include at /home/ricsi/esp/esp-idf/components/esp_system/ubsan.c:311
+[0m
+[0;33m0x40800001: _vector_table at /home/ricsi/esp/esp-idf/components/riscv/vectors_intc.S:54
+[0m
+[0;33m
+Backtrace:
+
+[0m
+[0;33m0x4001975a: software_reset_cpu in ROM
+[0m
+[0;33m0x40801bcb: lock_acquire_generic at /home/ricsi/esp/esp-idf/components/newlib/locks.c:133
+[0m
+[0;33mStack dump detected[0m
+[0;33m0x4080089e: panic_abort at /home/ricsi/esp/esp-idf/components/esp_system/panic.c:463
+0x40808a66: __ubsan_include at /home/ricsi/esp/esp-idf/components/esp_system/ubsan.c:311
+[0m
+[0;33mFailed to run gdb_panic_server.py script: Command '['riscv32-esp-elf-gdb', '--batch', '-n', '/home/ricsi/IoT/Firmware/Smart_Lock/build/main.elf', '-ex', 'target remote | "/home/ricsi/.espressif/python_env/idf5.3_py3.10_env/bin/python" -m esp_idf_panic_decoder --target esp32c6 "/tmp/tmpd2co8427"', '-ex', 'bt']' returned non-zero exit status 1.
+b'Traceback (most recent call last):\n  File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main\n    return _run_code(code, main_globals, None,\n  File "/usr/lib/python3.10/runpy.py", line 86, in _run_code\n    exec(code, run_globals)\n  File "/home/ricsi/.espressif/python_env/idf5.3_py3.10_env/lib/python3.10/site-packages/esp_idf_panic_decoder/__main__.py", line 4, in <module>\n    main()\n  File "/home/ricsi/.espressif/python_env/idf5.3_py3.10_env/lib/python3.10/site-packages/esp_idf_panic_decoder/gdb_panic_server.py", line 285, in main\n    panic_info = PANIC_OUTPUT_PARSERS[args.target](args.input_file.read())\n  File "/home/ricsi/.espressif/python_env/idf5.3_py3.10_env/lib/python3.10/site-packages/esp_idf_panic_decoder/gdb_panic_server.py", line 136, in parse_idf_riscv_panic_output\n    raise ValueError("Couldn\'t parse panic handler output")\nValueError: Couldn\'t parse panic handler output\nRemote communication error.  Target disconnected: Connection reset by peer.\nNo stack.\n'
+
+[0m
+[0;33m0x40800001: _vector_table at /home/ricsi/esp/esp-idf/components/riscv/vectors_intc.S:54
+[0m
+[0;33m0x4080dc1e: abort at /home/ricsi/esp/esp-idf/components/newlib/abort.c:35
+[0m
+[0;33m0x40020000: ets_efuse_get_mac in ROM
+[0m
+[0;33m0x40801bce: lock_acquire_generic at /home/ricsi/esp/esp-idf/components/newlib/locks.c:138
+[0m
+[0;33m0x40801c86: lock_release_generic at /home/ricsi/esp/esp-idf/components/newlib/locks.c:197
+[0m
+[0;33m0x40801d06: _lock_acquire_recursive at /home/ricsi/esp/esp-idf/components/newlib/locks.c:163
+0x40801ddc: __retarget_lock_acquire_recursive at /home/ricsi/esp/esp-idf/components/newlib/locks.c:322
+[0m
+[0;33m0x4002814c: __retarget_lock_acquire_recursive in ROM
+[0m
+[0;33m0x4003bf14: _vfprintf_r in ROM
+[0m
+[0;33m0x4200c4f8: usb_serial_jtag_tx_char at /home/ricsi/esp/esp-idf/components/esp_driver_usb_serial_jtag/src/usb_serial_jtag_vfs.c:132 (discriminator 1)
+[0m
+[0;33m0x4200c7e2: usb_serial_jtag_write at /home/ricsi/esp/esp-idf/components/esp_driver_usb_serial_jtag/src/usb_serial_jtag_vfs.c:166
+[0m
+[0;33m0x40809128: xQueueGenericSend at /home/ricsi/esp/esp-idf/components/freertos/FreeRTOS-Kernel/queue.c:1057
+[0m
+[0;33m0x400281a0: __retarget_lock_release_recursive in ROM
+[0m
+[0;33m0x408092ea: xQueueGiveMutexRecursive at /home/ricsi/esp/esp-idf/components/freertos/FreeRTOS-Kernel/queue.c:796
+0x40801c86: lock_release_generic at /home/ricsi/esp/esp-idf/components/newlib/locks.c:197
+[0m
+[0;33m0x4204239e: zb_multimac_mlme_set_request_proxy at ??:?
+0x40801d42: _lock_release_recursive at /home/ricsi/esp/esp-idf/components/newlib/locks.c:212
+[0m
+[0;33m0x40801e7a: __retarget_lock_release_recursive at /home/ricsi/esp/esp-idf/components/newlib/locks.c:348
+[0m
+[0;33m0x400281a0: __retarget_lock_release_recursive in ROM
+0x4003ca9c: _vfprintf_r in ROM
+[0m
+[0;33m0x4080cb88: spi_flash_hal_configure_host_io_mode at /home/ricsi/esp/esp-idf/components/hal/spi_flash_hal_common.inc:150
+[0m
+[0;33m0x4080cd7a: spi_flash_hal_read at /home/ricsi/esp/esp-idf/components/hal/spi_flash_hal_common.inc:200
+[0m
+[0;33m0x4001975a: software_reset_cpu in ROM
+[0m
+[0;33m0x40801bcb: lock_acquire_generic at /home/ricsi/esp/esp-idf/components/newlib/locks.c:133
+[0m
+[0;33mStack dump detected[0m
+[0;33m0x4080089e: panic_abort at /home/ricsi/esp/esp-idf/components/esp_system/panic.c:463
+0x40808a66: __ubsan_include at /home/ricsi/esp/esp-idf/components/esp_system/ubsan.c:311
+[0m
+[0;33m0x40800001: _vector_table at /home/ricsi/esp/esp-idf/components/riscv/vectors_intc.S:54
+[0m
+[0;33m
+Backtrace:
+
+[0m
+[0;33m0x4001975a: software_reset_cpu in ROM
+[0m
+[0m

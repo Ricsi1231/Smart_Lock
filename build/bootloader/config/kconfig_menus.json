@@ -443,6 +443,16 @@
         "children": [],
         "depends_on": null,
         "help": null,
+        "id": "SOC_APM_CTRL_FILTER_SUPPORTED",
+        "name": "SOC_APM_CTRL_FILTER_SUPPORTED",
+        "range": null,
+        "title": null,
+        "type": "bool"
+    },
+    {
+        "children": [],
+        "depends_on": null,
+        "help": null,
         "id": "SOC_PMU_SUPPORTED",
         "name": "SOC_PMU_SUPPORTED",
         "range": null,
@@ -1525,6 +1535,16 @@
         "help": null,
         "id": "SOC_I2C_SLAVE_SUPPORT_SLAVE_UNMATCH",
         "name": "SOC_I2C_SLAVE_SUPPORT_SLAVE_UNMATCH",
+        "range": null,
+        "title": null,
+        "type": "bool"
+    },
+    {
+        "children": [],
+        "depends_on": null,
+        "help": null,
+        "id": "SOC_I2C_SUPPORT_SLEEP_RETENTION",
+        "name": "SOC_I2C_SUPPORT_SLEEP_RETENTION",
         "range": null,
         "title": null,
         "type": "bool"
@@ -3123,6 +3143,16 @@
         "children": [],
         "depends_on": null,
         "help": null,
+        "id": "SOC_UART_SUPPORT_SLEEP_RETENTION",
+        "name": "SOC_UART_SUPPORT_SLEEP_RETENTION",
+        "range": null,
+        "title": null,
+        "type": "bool"
+    },
+    {
+        "children": [],
+        "depends_on": null,
+        "help": null,
         "id": "SOC_UART_SUPPORT_FSM_TX_WAIT_SEND",
         "name": "SOC_UART_SUPPORT_FSM_TX_WAIT_SEND",
         "range": null,
@@ -3703,6 +3733,16 @@
         "children": [],
         "depends_on": null,
         "help": null,
+        "id": "SOC_LP_CORE_SUPPORT_ETM",
+        "name": "SOC_LP_CORE_SUPPORT_ETM",
+        "range": null,
+        "title": null,
+        "type": "bool"
+    },
+    {
+        "children": [],
+        "depends_on": null,
+        "help": null,
         "id": "IDF_CMAKE",
         "name": "IDF_CMAKE",
         "range": null,
@@ -3818,16 +3858,6 @@
         "range": null,
         "title": null,
         "type": "string"
-    },
-    {
-        "children": [],
-        "depends_on": null,
-        "help": null,
-        "id": "IDF_TARGET_LINUX",
-        "name": "IDF_TARGET_LINUX",
-        "range": null,
-        "title": null,
-        "type": "bool"
     },
     {
         "children": [],
@@ -8234,7 +8264,7 @@
                             {
                                 "children": [],
                                 "depends_on": "ESP_INT_WDT",
-                                "help": "The timeout of the watchdog, in miliseconds. Make this higher than the FreeRTOS tick rate.",
+                                "help": "The timeout of the watchdog, in milliseconds. Make this higher than the FreeRTOS tick rate.",
                                 "id": "ESP_INT_WDT_TIMEOUT_MS",
                                 "name": "ESP_INT_WDT_TIMEOUT_MS",
                                 "range": [
@@ -8361,7 +8391,7 @@
                                 "type": "bool"
                             }
                         ],
-                        "depends_on": "!IDF_TARGET_ESP32 && (ESP_SYSTEM_RTC_EXT_OSC || ESP_SYSTEM_RTC_EXT_XTAL)",
+                        "depends_on": "SOC_XT_WDT_SUPPORTED && (ESP_SYSTEM_RTC_EXT_OSC || ESP_SYSTEM_RTC_EXT_XTAL)",
                         "help": "This watchdog timer can detect oscillation failure of the XTAL32K_CLK. When such a failure\nis detected the hardware can be set up to automatically switch to BACKUP32K_CLK and generate\nan interrupt.",
                         "id": "ESP_XT_WDT",
                         "name": "ESP_XT_WDT",

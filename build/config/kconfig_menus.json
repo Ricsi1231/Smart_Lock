@@ -443,6 +443,16 @@
         "children": [],
         "depends_on": null,
         "help": null,
+        "id": "SOC_APM_CTRL_FILTER_SUPPORTED",
+        "name": "SOC_APM_CTRL_FILTER_SUPPORTED",
+        "range": null,
+        "title": null,
+        "type": "bool"
+    },
+    {
+        "children": [],
+        "depends_on": null,
+        "help": null,
         "id": "SOC_PMU_SUPPORTED",
         "name": "SOC_PMU_SUPPORTED",
         "range": null,
@@ -1525,6 +1535,16 @@
         "help": null,
         "id": "SOC_I2C_SLAVE_SUPPORT_SLAVE_UNMATCH",
         "name": "SOC_I2C_SLAVE_SUPPORT_SLAVE_UNMATCH",
+        "range": null,
+        "title": null,
+        "type": "bool"
+    },
+    {
+        "children": [],
+        "depends_on": null,
+        "help": null,
+        "id": "SOC_I2C_SUPPORT_SLEEP_RETENTION",
+        "name": "SOC_I2C_SUPPORT_SLEEP_RETENTION",
         "range": null,
         "title": null,
         "type": "bool"
@@ -3123,6 +3143,16 @@
         "children": [],
         "depends_on": null,
         "help": null,
+        "id": "SOC_UART_SUPPORT_SLEEP_RETENTION",
+        "name": "SOC_UART_SUPPORT_SLEEP_RETENTION",
+        "range": null,
+        "title": null,
+        "type": "bool"
+    },
+    {
+        "children": [],
+        "depends_on": null,
+        "help": null,
         "id": "SOC_UART_SUPPORT_FSM_TX_WAIT_SEND",
         "name": "SOC_UART_SUPPORT_FSM_TX_WAIT_SEND",
         "range": null,
@@ -3703,6 +3733,16 @@
         "children": [],
         "depends_on": null,
         "help": null,
+        "id": "SOC_LP_CORE_SUPPORT_ETM",
+        "name": "SOC_LP_CORE_SUPPORT_ETM",
+        "range": null,
+        "title": null,
+        "type": "bool"
+    },
+    {
+        "children": [],
+        "depends_on": null,
+        "help": null,
         "id": "IDF_CMAKE",
         "name": "IDF_CMAKE",
         "range": null,
@@ -3818,16 +3858,6 @@
         "range": null,
         "title": null,
         "type": "string"
-    },
-    {
-        "children": [],
-        "depends_on": null,
-        "help": null,
-        "id": "IDF_TARGET_LINUX",
-        "name": "IDF_TARGET_LINUX",
-        "range": null,
-        "title": null,
-        "type": "bool"
     },
     {
         "children": [],
@@ -7532,7 +7562,7 @@
                                     {
                                         "children": [],
                                         "depends_on": "BT_CLASSIC_ENABLED && BT_BLUEDROID_ENABLED",
-                                        "help": "Advanced Audio Distrubution Profile",
+                                        "help": "Advanced Audio Distribution Profile",
                                         "id": "BT_A2DP_ENABLE",
                                         "name": "BT_A2DP_ENABLE",
                                         "range": null,
@@ -7633,7 +7663,7 @@
                             {
                                 "children": [],
                                 "depends_on": "BT_HFP_AUDIO_DATA_PATH_HCI && BT_BLUEDROID_ENABLED",
-                                "help": "This enables Wide Band Speech. Should disable it when SCO data path is PCM.\nOtherwise there will be no data transmited via GPIOs.",
+                                "help": "This enables Wide Band Speech. Should disable it when SCO data path is PCM.\nOtherwise there will be no data transmitted via GPIOs.",
                                 "id": "BT_HFP_WBS_ENABLE",
                                 "name": "BT_HFP_WBS_ENABLE",
                                 "range": null,
@@ -7856,6 +7886,16 @@
                                                 "name": "BT_SMP_SLAVE_CON_PARAMS_UPD_ENABLE",
                                                 "range": null,
                                                 "title": "Slave enable connection parameters update during pairing",
+                                                "type": "bool"
+                                            },
+                                            {
+                                                "children": [],
+                                                "depends_on": "BT_BLE_SMP_ENABLE && BT_BLUEDROID_ENABLED",
+                                                "help": "There are tracking risks associated with using a fixed or static IRK.\nIf enabled this option, Bluedroid will assign a new randomly-generated IRK\nwhen all pairing and bonding records are deleted. This would decrease the ability\nof a previously paired peer to be used to determine whether a device\nwith which it previously shared an IRK is within range.",
+                                                "id": "BT_BLE_SMP_ID_RESET_ENABLE",
+                                                "name": "BT_BLE_SMP_ID_RESET_ENABLE",
+                                                "range": null,
+                                                "title": "Reset device identity when all bonding records are deleted",
                                                 "type": "bool"
                                             }
                                         ],
@@ -10233,6 +10273,16 @@
                                 "type": "bool"
                             },
                             {
+                                "children": [],
+                                "depends_on": "BT_NIMBLE_ENABLED",
+                                "help": "There are tracking risks associated with using a fixed or static IRK.\nIf enabled this option, Bluedroid will assign a new randomly-generated IRK\nwhen all pairing and bonding records are deleted. This would decrease the ability\nof a previously paired peer to be used to determine whether a device\nwith which it previously shared an IRK is within range.",
+                                "id": "BT_NIMBLE_SMP_ID_RESET",
+                                "name": "BT_NIMBLE_SMP_ID_RESET",
+                                "range": null,
+                                "title": "Reset device identity when all bonding records are deleted",
+                                "type": "bool"
+                            },
+                            {
                                 "children": [
                                     {
                                         "children": [],
@@ -11579,7 +11629,7 @@
                                                 "id": "BT_LE_HCI_INTERFACE_USE_RAM",
                                                 "name": "BT_LE_HCI_INTERFACE_USE_RAM",
                                                 "range": null,
-                                                "title": "ram",
+                                                "title": "VHCI",
                                                 "type": "bool"
                                             },
                                             {
@@ -11589,15 +11639,45 @@
                                                 "id": "BT_LE_HCI_INTERFACE_USE_UART",
                                                 "name": "BT_LE_HCI_INTERFACE_USE_UART",
                                                 "range": null,
-                                                "title": "uart",
+                                                "title": "UART(H4)",
                                                 "type": "bool"
                                             }
                                         ],
                                         "depends_on": "BT_CONTROLLER_ENABLED",
                                         "help": null,
-                                        "id": "component-config-bluetooth-controller-options-hci-config-select-hci-interface",
+                                        "id": "component-config-bluetooth-controller-options-hci-config-hci-mode",
                                         "name": "BT_LE_HCI_INTERFACE",
-                                        "title": "Select HCI interface",
+                                        "title": "HCI mode",
+                                        "type": "choice"
+                                    },
+                                    {
+                                        "children": [
+                                            {
+                                                "children": [],
+                                                "depends_on": "<choice BT_LE_UART_HCI_MODE_CHOICE>",
+                                                "help": "UART HCI Mode with DMA functionality.",
+                                                "id": "BT_LE_UART_HCI_DMA_MODE",
+                                                "name": "BT_LE_UART_HCI_DMA_MODE",
+                                                "range": null,
+                                                "title": "UHCI(UART with DMA)(EXPERIMENTAL)",
+                                                "type": "bool"
+                                            },
+                                            {
+                                                "children": [],
+                                                "depends_on": "<choice BT_LE_UART_HCI_MODE_CHOICE>",
+                                                "help": "UART HCI Mode without DMA functionality.",
+                                                "id": "BT_LE_UART_HCI_NO_DMA_MODE",
+                                                "name": "BT_LE_UART_HCI_NO_DMA_MODE",
+                                                "range": null,
+                                                "title": "UART(NO DMA)",
+                                                "type": "bool"
+                                            }
+                                        ],
+                                        "depends_on": "BT_LE_HCI_INTERFACE_USE_UART && BT_CONTROLLER_ENABLED",
+                                        "help": "Specify UART HCI mode: DMA or No DMA",
+                                        "id": "component-config-bluetooth-controller-options-hci-config-uart-hci-mode",
+                                        "name": "BT_LE_UART_HCI_MODE_CHOICE",
+                                        "title": "UART HCI mode",
                                         "type": "choice"
                                     },
                                     {
@@ -11712,12 +11792,52 @@
                                     },
                                     {
                                         "children": [],
-                                        "depends_on": "BT_LE_HCI_INTERFACE_USE_UART && BT_CONTROLLER_ENABLED",
-                                        "help": "Set the size of uart task stack",
-                                        "id": "BT_LE_HCI_UART_TASK_STACK_SIZE",
-                                        "name": "BT_LE_HCI_UART_TASK_STACK_SIZE",
+                                        "depends_on": "BT_LE_UART_HCI_NO_DMA_MODE && BT_CONTROLLER_ENABLED",
+                                        "help": "The size of rx ring buffer memory",
+                                        "id": "BT_LE_HCI_UART_RX_BUFFER_SIZE",
+                                        "name": "BT_LE_HCI_UART_RX_BUFFER_SIZE",
                                         "range": null,
-                                        "title": "HCI uart task stack size",
+                                        "title": "The size of rx ring buffer memory",
+                                        "type": "int"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "BT_LE_UART_HCI_NO_DMA_MODE && BT_CONTROLLER_ENABLED",
+                                        "help": "The size of tx ring buffer memory",
+                                        "id": "BT_LE_HCI_UART_TX_BUFFER_SIZE",
+                                        "name": "BT_LE_HCI_UART_TX_BUFFER_SIZE",
+                                        "range": null,
+                                        "title": "The size of tx ring buffer memory",
+                                        "type": "int"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "!BT_LE_HCI_INTERFACE_USE_RAM && BT_CONTROLLER_ENABLED",
+                                        "help": "This configures stack size of hci transport task",
+                                        "id": "BT_LE_HCI_TRANS_TASK_STACK_SIZE",
+                                        "name": "BT_LE_HCI_TRANS_TASK_STACK_SIZE",
+                                        "range": null,
+                                        "title": "HCI transport task stack size",
+                                        "type": "int"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "BT_LE_UART_HCI_DMA_MODE && BT_CONTROLLER_ENABLED",
+                                        "help": "The amount of rx memory received at the same time",
+                                        "id": "BT_LE_HCI_TRANS_RX_MEM_NUM",
+                                        "name": "BT_LE_HCI_TRANS_RX_MEM_NUM",
+                                        "range": null,
+                                        "title": "The amount of rx memory received at the same time",
+                                        "type": "int"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "BT_LE_UART_HCI_DMA_MODE && BT_CONTROLLER_ENABLED",
+                                        "help": "The amount of lldecs memory for driver dma mode",
+                                        "id": "BT_LE_HCI_LLDESCS_POOL_NUM",
+                                        "name": "BT_LE_HCI_LLDESCS_POOL_NUM",
+                                        "range": null,
+                                        "title": "The amount of lldecs memory for driver dma mode",
                                         "type": "int"
                                     }
                                 ],
@@ -11998,6 +12118,27 @@
                                         "name": "BT_LE_CONTROLLER_LOG_DUMP_ONLY",
                                         "range": null,
                                         "title": "Controller log dump mode only",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [
+                                            {
+                                                "children": [],
+                                                "depends_on": "BT_LE_CONTROLLER_LOG_STORAGE_ENABLE && BT_CONTROLLER_ENABLED",
+                                                "help": "The size of ble controller log partition shall be a multiples of 4K.\nThe name of log partition shall be \"bt_ctrl_log\".\nThe partition type shall be ESP_PARTITION_TYPE_DATA.\nThe partition sub_type shall be ESP_PARTITION_SUBTYPE_ANY.",
+                                                "id": "BT_LE_CONTROLLER_LOG_PARTITION_SIZE",
+                                                "name": "BT_LE_CONTROLLER_LOG_PARTITION_SIZE",
+                                                "range": null,
+                                                "title": "size of ble controller log partition(Multiples of 4K)",
+                                                "type": "int"
+                                            }
+                                        ],
+                                        "depends_on": "!BT_LE_CONTROLLER_LOG_DUMP_ONLY && BT_LE_CONTROLLER_LOG_ENABLED && BT_CONTROLLER_ENABLED",
+                                        "help": "Store ble controller logs to flash memory.",
+                                        "id": "BT_LE_CONTROLLER_LOG_STORAGE_ENABLE",
+                                        "name": "BT_LE_CONTROLLER_LOG_STORAGE_ENABLE",
+                                        "range": null,
+                                        "title": "Store ble controller logs to flash(Experimental)",
                                         "type": "bool"
                                     },
                                     {
@@ -12375,6 +12516,156 @@
                                 "range": null,
                                 "title": "Enable TX CCA feature",
                                 "type": "bool"
+                            },
+                            {
+                                "children": [
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_N15",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_N15",
+                                        "range": null,
+                                        "title": "-15dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_N12",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_N12",
+                                        "range": null,
+                                        "title": "-12dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_N9",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_N9",
+                                        "range": null,
+                                        "title": "-9dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_N6",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_N6",
+                                        "range": null,
+                                        "title": "-6dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_N3",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_N3",
+                                        "range": null,
+                                        "title": "-3dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_N0",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_N0",
+                                        "range": null,
+                                        "title": "0dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_P3",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_P3",
+                                        "range": null,
+                                        "title": "+3dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_P6",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_P6",
+                                        "range": null,
+                                        "title": "+6dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_P9",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_P9",
+                                        "range": null,
+                                        "title": "+9dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_P12",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_P12",
+                                        "range": null,
+                                        "title": "+12dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_P15",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_P15",
+                                        "range": null,
+                                        "title": "+15dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_P18",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_P18",
+                                        "range": null,
+                                        "title": "+18dBm",
+                                        "type": "bool"
+                                    },
+                                    {
+                                        "children": [],
+                                        "depends_on": "<choice BT_LE_DFT_TX_POWER_LEVEL_DBM>",
+                                        "help": null,
+                                        "id": "BT_LE_DFT_TX_POWER_LEVEL_P20",
+                                        "name": "BT_LE_DFT_TX_POWER_LEVEL_P20",
+                                        "range": null,
+                                        "title": "+20dBm",
+                                        "type": "bool"
+                                    }
+                                ],
+                                "depends_on": "BT_CONTROLLER_ENABLED",
+                                "help": "Specify default Tx power level(dBm).",
+                                "id": "component-config-bluetooth-controller-options-ble-default-tx-power-level-dbm-",
+                                "name": "BT_LE_DFT_TX_POWER_LEVEL_DBM",
+                                "title": "BLE default Tx power level(dBm)",
+                                "type": "choice"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "BT_CONTROLLER_ENABLED",
+                                "help": null,
+                                "id": "BT_LE_DFT_TX_POWER_LEVEL_DBM_EFF",
+                                "name": "BT_LE_DFT_TX_POWER_LEVEL_DBM_EFF",
+                                "range": null,
+                                "title": null,
+                                "type": "int"
                             }
                         ],
                         "depends_on": "BT_CONTROLLER_ENABLED",
@@ -15762,6 +16053,44 @@
                 "children": [
                     {
                         "children": [],
+                        "depends_on": "SOC_TOUCH_SENSOR_SUPPORTED",
+                        "help": "Place touch sensor oneshot scanning and continuous scanning functions into IRAM,\nso that these function can be IRAM-safe and able to be called when the flash cache is disabled.\nEnabling this option can improve driver performance as well.",
+                        "id": "TOUCH_CTRL_FUNC_IN_IRAM",
+                        "name": "TOUCH_CTRL_FUNC_IN_IRAM",
+                        "range": null,
+                        "title": "Place touch sensor control functions into IRAM",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "SOC_TOUCH_SENSOR_SUPPORTED",
+                        "help": "Ensure the touch sensor interrupt is IRAM-Safe by allowing the interrupt handler to be\nexecutable when the cache is disabled (e.g. SPI Flash write).",
+                        "id": "TOUCH_ISR_IRAM_SAFE",
+                        "name": "TOUCH_ISR_IRAM_SAFE",
+                        "range": null,
+                        "title": "Touch sensor ISR IRAM-Safe",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
+                        "depends_on": "SOC_TOUCH_SENSOR_SUPPORTED",
+                        "help": "Whether to enable the debug log message for touch driver.\nNote that, this option only controls the touch driver log, won't affect other drivers.",
+                        "id": "TOUCH_ENABLE_DEBUG_LOG",
+                        "name": "TOUCH_ENABLE_DEBUG_LOG",
+                        "range": null,
+                        "title": "Enable debug log",
+                        "type": "bool"
+                    }
+                ],
+                "depends_on": "SOC_TOUCH_SENSOR_SUPPORTED",
+                "id": "component-config-esp-driver-touch-sensor-configurations",
+                "title": "ESP-Driver:Touch Sensor Configurations",
+                "type": "menu"
+            },
+            {
+                "children": [
+                    {
+                        "children": [],
                         "depends_on": "SOC_TEMP_SENSOR_SUPPORTED",
                         "help": "whether to enable the debug log message for temperature sensor driver.\nNote that, this option only controls the temperature sensor driver log, won't affect other drivers.",
                         "id": "TEMP_SENSOR_ENABLE_DEBUG_LOG",
@@ -18288,7 +18617,7 @@
                             {
                                 "children": [],
                                 "depends_on": "ESP_INT_WDT",
-                                "help": "The timeout of the watchdog, in miliseconds. Make this higher than the FreeRTOS tick rate.",
+                                "help": "The timeout of the watchdog, in milliseconds. Make this higher than the FreeRTOS tick rate.",
                                 "id": "ESP_INT_WDT_TIMEOUT_MS",
                                 "name": "ESP_INT_WDT_TIMEOUT_MS",
                                 "range": [
@@ -18415,7 +18744,7 @@
                                 "type": "bool"
                             }
                         ],
-                        "depends_on": "!IDF_TARGET_ESP32 && (ESP_SYSTEM_RTC_EXT_OSC || ESP_SYSTEM_RTC_EXT_XTAL)",
+                        "depends_on": "SOC_XT_WDT_SUPPORTED && (ESP_SYSTEM_RTC_EXT_OSC || ESP_SYSTEM_RTC_EXT_XTAL)",
                         "help": "This watchdog timer can detect oscillation failure of the XTAL32K_CLK. When such a failure\nis detected the hardware can be set up to automatically switch to BACKUP32K_CLK and generate\nan interrupt.",
                         "id": "ESP_XT_WDT",
                         "name": "ESP_XT_WDT",
@@ -20100,6 +20429,16 @@
                     },
                     {
                         "children": [],
+                        "depends_on": "ESP_COREDUMP_DATA_FORMAT_ELF && !IDF_TARGET_ESP32C5",
+                        "help": "Storing these sections can help with easier debugging and troubleshooting.\nHowever, additional storage space will be required in the core dump partition.\nAt least 128KB should be reserved, but the actual amount required may vary based\non the application's DRAM usage.\nNote that sections located in external RAM will not be stored.",
+                        "id": "ESP_COREDUMP_CAPTURE_DRAM",
+                        "name": "ESP_COREDUMP_CAPTURE_DRAM",
+                        "range": null,
+                        "title": "Include whole .bss and .data sections and heap data into core dump file",
+                        "type": "bool"
+                    },
+                    {
+                        "children": [],
                         "depends_on": "ESP_COREDUMP_ENABLE_TO_FLASH",
                         "help": "When enabled, if any data are found on the flash core dump partition,\nthey will be checked by calculating their checksum.",
                         "id": "ESP_COREDUMP_CHECK_BOOT",
@@ -20171,7 +20510,7 @@
                     {
                         "children": [],
                         "depends_on": "ESP_COREDUMP_ENABLE",
-                        "help": "Size of the memory to be reserved for core dump stack. If 0 core dump process will run on\nthe stack of crashed task/ISR, otherwise special stack will be allocated.\nTo ensure that core dump itself will not overflow task/ISR stack set this to the value above 800.\nNOTE: It eats DRAM.",
+                        "help": "Size of the memory to be reserved for core dump stack. If 0 core dump process will run on\nthe stack of crashed task/ISR, otherwise special stack will be allocated.\nTo ensure that core dump itself will not overflow task/ISR stack set this to the value around 1300-1800\ndepending on the chosen checksum calculation method. SHA256 method needs more stack space than CRC32.\nNOTE: It eats DRAM.",
                         "id": "ESP_COREDUMP_STACK_SIZE",
                         "name": "ESP_COREDUMP_STACK_SIZE",
                         "range": null,
@@ -26565,6 +26904,34 @@
                         "type": "choice"
                     },
                     {
+                        "children": [
+                            {
+                                "children": [],
+                                "depends_on": "OPENTHREAD_ENABLED",
+                                "help": "The OpenThread package name.",
+                                "id": "OPENTHREAD_PACKAGE_NAME",
+                                "name": "OPENTHREAD_PACKAGE_NAME",
+                                "range": null,
+                                "title": "OpenThread package name",
+                                "type": "string"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "OPENTHREAD_ENABLED",
+                                "help": "The OpenThread platform information.",
+                                "id": "OPENTHREAD_PLATFORM_INFO",
+                                "name": "OPENTHREAD_PLATFORM_INFO",
+                                "range": null,
+                                "title": "platform information",
+                                "type": "string"
+                            }
+                        ],
+                        "depends_on": "OPENTHREAD_ENABLED",
+                        "id": "component-config-openthread-openthread-version-message",
+                        "title": "OpenThread version message",
+                        "type": "menu"
+                    },
+                    {
                         "children": [],
                         "depends_on": "OPENTHREAD_RADIO",
                         "help": "Select this to enable OpenThread NCP vendor commands.",
@@ -28050,6 +28417,16 @@
                                 "name": "ULP_PANIC_OUTPUT_ENABLE",
                                 "range": null,
                                 "title": "Enable panic handler which outputs over LP UART",
+                                "type": "bool"
+                            },
+                            {
+                                "children": [],
+                                "depends_on": "ULP_COPROC_TYPE_LP_CORE && (SOC_ULP_SUPPORTED || SOC_RISCV_COPROC_SUPPORTED || SOC_LP_CORE_SUPPORTED)",
+                                "help": "Set this option to route lp_core_printf to the console HP-UART.\nThis allows you to easily view print outputs from the LP core, without\nhaving to connect to the LP-UART. This option comes with the following\nlimitations:\n\n1. There is no mutual exclusion between the HP-Core and the LP-Core accessing\nthe HP-UART, which means that if both cores are logging heavily the output\nstrings might get mangled together.\n2. The HP-UART can only work while the HP-Core is running, which means that\nif the HP-Core is in deep sleep, the LP-Core will not be able to print to the\nconsole HP-UART.\n\nDue to these limitations it is only recommended to use this option for easy debugging.\nFor more serious use-cases you should use the LP-UART.",
+                                "id": "ULP_HP_UART_CONSOLE_PRINT",
+                                "name": "ULP_HP_UART_CONSOLE_PRINT",
+                                "range": null,
+                                "title": "Route lp_core_printf to the console HP-UART",
                                 "type": "bool"
                             }
                         ],
