@@ -1,0 +1,68 @@
+[1/12] Performing build step for 'bootloader'
+[1/1] cd /home/ricsi/Documents/Smart_Lock/build/bootloader/esp-idf/esptool_py && /home/ricsi/.espressif/python_env/idf5.2_py3.12_env/bin/python /home/ricsi/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /home/ricsi/Documents/Smart_Lock/build/bootloader/bootloader.bin
+Bootloader binary size 0x54b0 bytes. 0x2b50 bytes (34%) free.
+[2/12] No install step for 'bootloader'
+[3/12] Completed 'bootloader'
+[4/12] Building CXX object esp-idf/lock_driver/CMakeFiles/__idf_lock_driver.dir/src/lock_driver.cpp.obj
+/home/ricsi/Documents/Smart_Lock/components/lock_driver/src/lock_driver.cpp: In member function 'esp_err_t LockSystem::Lock::initalize(uart_port_t, uint8_t, uint8_t)':
+/home/ricsi/Documents/Smart_Lock/components/lock_driver/src/lock_driver.cpp:21:9: warning: missing initializer for member 'uart_config_t::rx_flow_ctrl_thresh' [-Wmissing-field-initializers]
+   21 |         };
+      |         ^
+/home/ricsi/Documents/Smart_Lock/components/lock_driver/src/lock_driver.cpp:21:9: warning: missing initializer for member 'uart_config_t::<anonymous>' [-Wmissing-field-initializers]
+[5/12] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/main.cpp.obj
+/home/ricsi/Documents/Smart_Lock/main/main.cpp: In function 'void app_main()':
+/home/ricsi/Documents/Smart_Lock/main/main.cpp:16:17: warning: unused variable 'TAG' [-Wunused-variable]
+   16 |     const char *TAG = "ESP32_LOCK_UART";
+      |                 ^~~
+[6/12] Linking C static library esp-idf/lock_driver/liblock_driver.a
+[7/12] Linking C static library esp-idf/main/libmain.a
+[8/12] Generating ld/sections.ld
+[9/12] Linking CXX executable main.elf
+[10/12] Generating binary image from built executable
+esptool.py v4.7.0
+Creating esp32c6 image...
+Merged 1 ELF section
+Successfully created esp32c6 image.
+Generated /home/ricsi/Documents/Smart_Lock/build/main.bin
+[11/12] cd /home/ricsi/Documents/Smart_Lock/build/esp-idf/esptool_py && /home/ricsi/.espressif/python_env/idf5.2_py3.12_env/bin/python /home/ricsi/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/ricsi/Documents/Smart_Lock/build/partition_table/partition-table.bin /home/ricsi/Documents/Smart_Lock/build/main.bin
+main.bin binary size 0x29dd0 bytes. Smallest app partition is 0xe1000 bytes. 0xb7230 bytes (81%) free.
+[11/12] cd /home/ricsi/esp/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/ricsi/esp/esp-idf -D "SERIAL_TOOL=/home/ricsi/.espressif/python_env/idf5.2_py3.12_env/bin/python;;/home/ricsi/esp/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32c6" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/ricsi/Documents/Smart_Lock/build -P /home/ricsi/esp/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32c6 -p /dev/ttyUSB0 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x0 bootloader/bootloader.bin 0x10000 main.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.7.0
+Serial port /dev/ttyUSB0
+Connecting....
+Chip is ESP32-C6 (QFN40) (revision v0.0)
+Features: WiFi 6, BT 5, IEEE802.15.4
+Crystal is 40MHz
+MAC: 40:4c:ca:ff:fe:4d:ba:9c
+BASE MAC: 40:4c:ca:4d:ba:9c
+MAC_EXT: ff:fe
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00000000 to 0x00005fff...
+Flash will be erased from 0x00010000 to 0x00039fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+Compressed 21680 bytes to 13070...
+Writing at 0x00000000... (100 %)
+Wrote 21680 bytes (13070 compressed) at 0x00000000 in 0.6 seconds (effective 288.3 kbit/s)...
+Hash of data verified.
+Compressed 171472 bytes to 86197...
+Writing at 0x00010000... (16 %)
+Writing at 0x0001aa7a... (33 %)
+Writing at 0x000215b2... (50 %)
+Writing at 0x00028b99... (66 %)
+Writing at 0x00030b8c... (83 %)
+Writing at 0x000379b2... (100 %)
+Wrote 171472 bytes (86197 compressed) at 0x00010000 in 2.2 seconds (effective 613.4 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 136...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (136 compressed) at 0x00008000 in 0.1 seconds (effective 487.5 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

@@ -12,25 +12,27 @@
  */
 /*
  * Automatically generated file. DO NOT EDIT.
- * Espressif IoT Development Framework (ESP-IDF) 5.3.1 Configuration Header
+ * Espressif IoT Development Framework (ESP-IDF) 5.2.2 Configuration Header
  */
        
 /* List of deprecated options */
 /*
- * SPDX-FileCopyrightText: 2021-2024 Espressif Systems (Shanghai) CO LTD
+ * SPDX-FileCopyrightText: 2021 Espressif Systems (Shanghai) CO LTD
  *
  * SPDX-License-Identifier: Apache-2.0
  */
 /* CPU instruction prefetch padding size for flash mmap scenario */
-/*
- * PMP region granularity size
- * Software may determine the PMP granularity by writing zero to pmp0cfg, then writing all ones
- * to pmpaddr0, then reading back pmpaddr0. If G is the index of the least-significant bit set,
- * the PMP granularity is 2^G+2 bytes.
- */
+_esp_flash_mmap_prefetch_pad_size = 16;
 /* CPU instruction prefetch padding size for memory protection scenario */
+_esp_memprot_prefetch_pad_size = 0;
 /* Memory alignment size for PMS */
+_esp_memprot_align_size = 0;
+_esp_mmu_block_size = (0x8000);
     /* rtc timer data (s_rtc_timer_retain_mem, see esp_clk.c files). For rtc_timer_data_in_rtc_mem section. */
+/**
+ * physical memory is mapped twice to the vritual address (IRAM and DRAM).
+ * `I_D_SRAM_OFFSET` is the offset between the two locations of the same physical memory
+ */
 /*
  * IDRAM0_2_SEG_SIZE_DEFAULT is used when page size is 64KB
  */
@@ -41,6 +43,8 @@ MEMORY
    *  of the various regions. The 'data access port' dram/drom regions map to the same iram/irom regions but
    *  are connected to the data port of the CPU and eg allow byte-wise access.
    */
+  /* IRAM for PRO CPU. */
+  iram0_0_seg (RX) : org = (0x40800000), len = 0x4086E610 - (0x40800000 - 0x40800000) - (0x40800000)
   /* Flash mapped instruction data */
   irom_seg (RX) : org = 0x42000020, len = (0x8000 << 8) - 0x20
   /**
@@ -54,7 +58,7 @@ MEMORY
    * Shared data RAM, excluding memory reserved for ROM bss/data/stack.
    * Enabling Bluetooth & Trace Memory features in menuconfig will decrease the amount of RAM available.
    */
-  sram_seg (RWX) : org = 0x40800000, len = 0x4086E610 - 0x40800000
+  dram0_0_seg (RW) : org = (0x40800000), len = 0x4086E610 - (0x40800000 - 0x40800000) - (0x40800000)
   /* Flash mapped constant data */
   drom_seg (R) : org = 0x42000020, len = (0x8000 << 8) - 0x20
   /* (See irom_seg for meaning of 0x20 offset in the above.) */
@@ -71,7 +75,7 @@ MEMORY
   */
   lp_reserved_seg(RW) : org = 0x50000000 + 0x4000 - (0 + (24)), len = (0 + (24))
 }
-/* Heap ends at top of sram_seg */
+/* Heap ends at top of dram0_0_seg */
 _heap_end = 0x40000000;
 _data_seg_org = ORIGIN(rtc_data_seg);
 /**

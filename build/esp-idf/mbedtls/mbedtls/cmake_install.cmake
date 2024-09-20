@@ -34,15 +34,15 @@ endif()
 
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "/home/ricsi/.espressif/tools/riscv32-esp-elf/esp-13.2.0_20240530/riscv32-esp-elf/bin/riscv32-esp-elf-objdump")
+  set(CMAKE_OBJDUMP "/home/ricsi/.espressif/tools/riscv32-esp-elf/esp-13.2.0_20230928/riscv32-esp-elf/bin/riscv32-esp-elf-objdump")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/ricsi/IoT/Firmware/Smart_Lock/build/esp-idf/mbedtls/mbedtls/include/cmake_install.cmake")
-  include("/home/ricsi/IoT/Firmware/Smart_Lock/build/esp-idf/mbedtls/mbedtls/3rdparty/cmake_install.cmake")
-  include("/home/ricsi/IoT/Firmware/Smart_Lock/build/esp-idf/mbedtls/mbedtls/library/cmake_install.cmake")
-  include("/home/ricsi/IoT/Firmware/Smart_Lock/build/esp-idf/mbedtls/mbedtls/pkgconfig/cmake_install.cmake")
+  include("/home/ricsi/Documents/Smart_Lock/build/esp-idf/mbedtls/mbedtls/include/cmake_install.cmake")
+  include("/home/ricsi/Documents/Smart_Lock/build/esp-idf/mbedtls/mbedtls/3rdparty/cmake_install.cmake")
+  include("/home/ricsi/Documents/Smart_Lock/build/esp-idf/mbedtls/mbedtls/library/cmake_install.cmake")
+  include("/home/ricsi/Documents/Smart_Lock/build/esp-idf/mbedtls/mbedtls/pkgconfig/cmake_install.cmake")
 
 endif()
 

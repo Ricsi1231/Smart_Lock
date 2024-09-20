@@ -1,0 +1,1 @@
+ninja: error: '/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/lib/esp32c6/libesp_zb_api_ed.a', needed by 'main.elf', missing and no known rule to make it
