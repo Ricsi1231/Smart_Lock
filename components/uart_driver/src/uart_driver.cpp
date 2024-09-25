@@ -13,7 +13,7 @@ namespace UartDriver {
         int rxBufferSize, int txBufferSize, uint8_t queueSize, QueueHandle_t *uartQueue, uint8_t flagAllocateInterrupt) {
         esp_err_t espCheck = ESP_OK;
 
-       /*if(uartPort != ESP_DEFAULT_UART_PORT || rxPin != ESP_DEFAULT_UART_RX_PIN || txPin != ESP_DEFAULT_UART_TX_PIN) {
+       if(uartPort != ESP_DEFAULT_UART_PORT || rxPin != ESP_DEFAULT_UART_RX_PIN || txPin != ESP_DEFAULT_UART_TX_PIN) {
             espCheck = ESP_ERR_INVALID_ARG;
             return espCheck;
         }
@@ -26,7 +26,12 @@ namespace UartDriver {
         if(rxBufferSize == 0 || txBufferSize == 0) {
             espCheck = ESP_ERR_INVALID_ARG;
             return espCheck;
-        }*/
+        }
+
+        if(uartConfig.baud_rate == 0 || uartConfig.data_bits == 0 || uartConfig.parity == 0 || uartConfig.stop_bits == 0) {
+            espCheck = ESP_ERR_INVALID_ARG;
+            return espCheck;
+        }
 
         espCheck = uart_param_config(ESP_DEFAULT_UART_PORT, &uartConfig);
         
@@ -46,18 +51,19 @@ namespace UartDriver {
         esp_err_t espCheck = ESP_OK;
         int uartWriteBytes = 0;
 
-        if(uart_is_driver_installed(ESP_DEFAULT_UART_PORT) == true) {
-            uartWriteBytes = uart_write_bytes(ESP_DEFAULT_UART_PORT, data, length);
-
-            if(uartWriteBytes < 0) {
-                espCheck = ESP_FAIL;
-            } 
-        }
-        else {
+        if(uart_is_driver_installed(ESP_DEFAULT_UART_PORT) == false) {
             espCheck = ESP_FAIL;
+            return espCheck;
         }
 
-        ESP_LOGI(TAG, "Data: %d\n", uartWriteBytes);
+        uartWriteBytes = uart_write_bytes(ESP_DEFAULT_UART_PORT, data, length);
+
+        if(uartWriteBytes < 0) {
+            espCheck = ESP_FAIL;
+            return espCheck;
+        }
+
+        // ESP_LOGI(TAG, "Data: %d\n", uartWriteBytes);
         return espCheck;
     }
 }

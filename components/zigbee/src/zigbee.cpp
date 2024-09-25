@@ -3,22 +3,29 @@
 
 const char *TAG = "ESP32_LOCK_UART";
 
+LockSystem::Lock ZigbeeComponent::Zigbee::Lock;
+
 namespace ZigbeeComponent {
     void Zigbee::start_high_level_commissioning(uint8_t mask) {
         ESP_ERROR_CHECK(esp_zb_bdb_start_top_level_commissioning(mask));
     }
     
-        esp_err_t Zigbee::attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message) {
-        esp_err_t error_state = ESP_OK;
+    esp_err_t Zigbee::attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message) {
+    esp_err_t error_state = ESP_OK;
 
-        if(message->info.dst_endpoint == HA_ESP_LOCK_ENDPOINT && message->info.cluster == ESP_ZB_HA_DOOR_LOCK_DEVICE_ID && message->attribute.id == ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_STATE_ID) {
-            if(message->attribute.data.type == ESP_ZB_ZCL_CMD_DOOR_LOCK_UNLOCK_DOOR) {
-                
-            }
-            else {
-                ESP_LOGI(TAG, "Wrong Lock command");
-            }
+    ESP_LOGI(TAG, "Data: %d", message->info.cluster);
+
+    if(message->info.dst_endpoint == HA_ESP_LOCK_ENDPOINT && message->info.cluster == ESP_ZB_HA_DOOR_LOCK_DEVICE_ID && message->attribute.id == ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_STATE_ID) {
+        if(message->attribute.data.type == ESP_ZB_ZCL_CMD_DOOR_LOCK_UNLOCK_DOOR) {
+            ESP_LOGI(TAG, "Message arrived from Zigbee dongle");   
+            
+            Lock.setKey();
+            Lock.open();
         }
+        else {
+            ESP_LOGI(TAG, "Wrong Lock command");
+        }
+    }
 
         return error_state;
     }
@@ -51,6 +58,8 @@ namespace ZigbeeComponent {
         esp_zb_set_primary_network_channel_set(ESP_ZB_PRIMARY_CHANNEL_MASK);
 
         ESP_ERROR_CHECK(esp_zb_start(false));
+
+        Lock.init(UART_RX_PIN, UART_TX_PIN);
 
         esp_zb_main_loop_iteration();
     }

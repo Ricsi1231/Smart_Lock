@@ -3,7 +3,7 @@
 #include <iostream>
 #include "nvs_flash.h"
 #include "esp_zigbee_core.h"
-#include "lock_driver.hpp"
+#include "Lock_driver.hpp"
 
 #define INSTALLCODE_POLICY_ENABLE       false   
 #define ED_AGING_TIMEOUT                ESP_ZB_ED_AGING_TIMEOUT_64MIN
@@ -33,6 +33,10 @@
         .host_connection_mode = HOST_CONNECTION_MODE_NONE,      \
     }
 
+#define UART_PORT (UART_NUM_1)
+#define UART_RX_PIN (GPIO_NUM_4)
+#define UART_TX_PIN (GPIO_NUM_5)
+
 namespace ZigbeeComponent {
     class Zigbee {
         public:
@@ -50,5 +54,7 @@ namespace ZigbeeComponent {
             static void start_high_level_commissioning(uint8_t mask);
             static esp_err_t attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message);
             static esp_err_t action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message);
+
+            static LockSystem::Lock Lock;
     };
 }

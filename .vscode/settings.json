@@ -4,6 +4,9 @@
         "esp_zigbee_core.h": "c",
         "zigbee_callback.h": "c",
         "zb_vendor.h": "c",
-        "zb_config_platform.h": "c"
+        "zb_config_platform.h": "c",
+        "iostream": "cpp",
+        "cstdint": "cpp",
+        "*.tcc": "cpp"
     }
 }
