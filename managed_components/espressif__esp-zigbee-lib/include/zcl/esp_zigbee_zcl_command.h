@@ -8,6 +8,7 @@
 #include "esp_err.h"
 #include "esp_zigbee_ota.h"
 #include <stdint.h>
+#include "aps/esp_zigbee_aps.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -18,16 +19,8 @@ extern "C" {
 #include "zgp/esp_zigbee_zgp.h"
 #endif /* CONFIG_ZB_GP_ENABLED */
 
-/** Enum of the Zigbee ZCL address mode
- * @note Defined the ZCL command of address_mode.
- * @anchor esp_zb_zcl_address_mode_t
- */
-typedef enum {
-    ESP_ZB_APS_ADDR_MODE_DST_ADDR_ENDP_NOT_PRESENT =        0x0,            /*!< DstAddress and DstEndpoint not present */
-    ESP_ZB_APS_ADDR_MODE_16_GROUP_ENDP_NOT_PRESENT  =       0x1,            /*!< 16-bit group address for DstAddress; DstEndpoint not present */
-    ESP_ZB_APS_ADDR_MODE_16_ENDP_PRESENT =                  0x2,            /*!< 16-bit address for DstAddress and DstEndpoint present */
-    ESP_ZB_APS_ADDR_MODE_64_ENDP_PRESENT =                  0x3,            /*!< 64-bit extended address for DstAddress and DstEndpoint present */
-} esp_zb_zcl_address_mode_t;
+/** Defined the ZCL command of address_mode */
+typedef esp_zb_aps_address_mode_t esp_zb_zcl_address_mode_t;
 
 /**
  * @brief ZCL command direction enum
@@ -37,6 +30,15 @@ typedef enum {
     ESP_ZB_ZCL_CMD_DIRECTION_TO_SRV = 0x00U, /*!< Command for cluster server side */
     ESP_ZB_ZCL_CMD_DIRECTION_TO_CLI = 0x01U, /*!< Command for cluster client side */
 } esp_zb_zcl_cmd_direction_t;
+
+/**
+ * @brief ZCL report direction enum of attribute
+ * @anchor esp_zb_zcl_report_direction_t
+ */
+typedef enum {
+    ESP_ZB_ZCL_REPORT_DIRECTION_SEND = 0x00U, /**< Report should be sent by a cluster. */
+    ESP_ZB_ZCL_REPORT_DIRECTION_RECV = 0x01U, /**< Report should be received by a cluster. */
+} esp_zb_zcl_report_direction_t;
 
 /**
  * @brief The application message of ZCL command send status message
@@ -76,6 +78,17 @@ typedef struct esp_zb_zcl_attribute_s {
 } esp_zb_zcl_attribute_t;
 
 /**
+ * @brief The Zigbee zcl custom cluster handlers struct
+ *
+ */
+typedef struct esp_zb_zcl_custom_cluster_handlers_s {
+    uint16_t cluster_id;                                        /*!< Cluster identifier */
+    uint8_t cluster_role;                                       /*!< Cluster role */
+    esp_zb_zcl_cluster_check_value_callback_t check_value_cb;   /*!< The callback for validating the value from ZCL command */
+    esp_zb_zcl_cluster_write_attr_callback_t write_attr_cb;     /*!< The callback for validating the ZCL write attribute */
+} esp_zb_zcl_custom_cluster_handlers_t;
+
+/**
  * @brief The Zigbee zcl cluster command properties struct
  *
  */
@@ -94,6 +107,15 @@ typedef struct esp_zb_zcl_basic_cmd_s {
     uint8_t  dst_endpoint;                      /*!< Destination endpoint */
     uint8_t  src_endpoint;                      /*!< Source endpoint */
 } esp_zb_zcl_basic_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL command common struct, no command specific payload
+ *
+ */
+typedef struct esp_zb_zcl_common_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;           /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;         /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+} esp_zb_zcl_common_cmd_t;
 
 /**
  * @brief The Zigbee ZCL read attribute command struct
@@ -146,6 +168,27 @@ typedef struct esp_zb_zcl_config_report_cmd_s {
 } esp_zb_zcl_config_report_cmd_t;
 
 /**
+ * @brief The Zigbee ZCL Attribute record struct
+ *
+ */
+typedef struct esp_zb_zcl_attribute_record_s {
+    uint8_t report_direction;   /*!< Report direction of this attribute, @ref esp_zb_zcl_report_direction_t */
+    uint16_t attributeID;       /*!< Attribute ID to report */
+} esp_zb_zcl_attribute_record_t;
+
+/**
+ * @brief The Zigbee ZCL read report configuration command struct
+ *
+ */
+typedef struct esp_zb_zcl_read_report_config_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;               /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;             /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    uint16_t clusterID;                                 /*!< Cluster ID to report */
+    uint16_t record_number;                             /*!< Number of attribute records in the record_field */
+    esp_zb_zcl_attribute_record_t *record_field;        /*!< Attribute records, @ref esp_zb_zcl_attribute_record_s */
+} esp_zb_zcl_read_report_config_cmd_t;
+
+/**
  * @brief The Zigbee ZCL report attribute command struct
  *
  */
@@ -193,6 +236,41 @@ typedef struct esp_zb_zcl_on_off_cmd_s {
     uint8_t  on_off_cmd_id;                         /*!< command id for the on-off cluster command */
 } esp_zb_zcl_on_off_cmd_t;
 
+/**
+ * @brief The Zigbee ZCL on-off off with effect command struct
+ *
+ */
+typedef struct esp_zb_zcl_on_off_off_with_effect_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;   /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode; /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    uint8_t effect_id;                      /*!< The field specifies the fading effect to use when switching the device off */
+    uint8_t effect_variant;                 /*!< The field is used to indicate which variant of the effect, indicated in the Effect Identifier field, SHOULD be triggered. */
+} esp_zb_zcl_on_off_off_with_effect_cmd_t;
+
+
+/**
+ * @brief The Zigbee ZCL on-off on with recall global scene command struct
+ *
+ */
+typedef struct esp_zb_zcl_on_off_on_with_recall_global_scene_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;   /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode; /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+} esp_zb_zcl_on_off_on_with_recall_global_scene_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL on-off on with timed off command struct
+ *
+ */
+typedef struct esp_zb_zcl_on_off_on_with_timed_off_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;   /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode; /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    uint8_t on_off_control;                 /*!< The field contains information on how the device is to be operated */
+    uint16_t on_time;                       /*!< The field specifies the length of time (in 1/10ths second) that the device is to remain "on", i.e.,
+                                                 with its OnOff attribute equal to 0x01, before automatically turning "off".*/
+    uint16_t off_wait_time;                 /*!< The field specifies the length of time (in 1/10ths second) that the device SHALL remain "off", i.e.,
+                                                 with its OnOff attribute equal to 0x00, and guarded to prevent an on command turning the device back "on" */
+} esp_zb_zcl_on_off_on_with_timed_off_cmd_t;
+
 /* ZCL identify cluster */
 
 /**
@@ -224,6 +302,51 @@ typedef struct esp_zb_zcl_identify_query_cmd_s {
     esp_zb_zcl_basic_cmd_t zcl_basic_cmd;           /*!< Basic command info */
     esp_zb_zcl_address_mode_t address_mode;         /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
 } esp_zb_zcl_identify_query_cmd_t;
+
+/* ZCL commisssioning cluster */
+
+/**
+ * @brief The Zigbee ZCL commisssioning restart device command struct
+ *
+ */
+typedef struct esp_zb_zcl_comm_restart_device_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                        /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;                      /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_commissioning_restart_device_options_t options;   /*!< Restart device options */
+    uint8_t delay;                                               /*!< Seconds of delay before starting the restart procedure */
+    uint8_t jitter;                                              /*!< Parameter to calculate the additional milliseconds should be added to delay */
+} esp_zb_zcl_comm_restart_device_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL commisssioning save startup parameters command struct
+ *
+ */
+typedef struct esp_zb_zcl_comm_save_startup_params_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;               /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;             /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    uint8_t index;                                      /*!< Index to save the parameter set */
+} esp_zb_zcl_comm_save_startup_params_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL commisssioning restore startup parameters command struct
+ *
+ */
+typedef struct esp_zb_zcl_comm_restore_startup_params_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;             /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;           /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    uint8_t index;                                    /*!< Index of the saved the parameter set to be restored */
+} esp_zb_zcl_comm_restore_startup_params_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL commisssioning reset startup parameters command struct
+ *
+ */
+typedef struct esp_zb_zcl_comm_reset_startup_params_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                             /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;                           /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_commissioning_reset_startup_param_options_t options;   /*!< Reset startup parameter options */
+    uint8_t index;                                                    /*!< Index of the saved parameters to be erased */
+} esp_zb_zcl_comm_reset_startup_params_cmd_t;
 
 /* ZCL level cluster */
 
@@ -515,7 +638,7 @@ typedef struct esp_zb_zcl_lock_unlock_door_cmd_s {
  */
 typedef struct esp_zb_zcl_groups_add_group_cmd_s {
     esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                  /*!< Basic command info */
-    esp_zb_zcl_address_mode_t address_mode;                /*!< APS addressing mode constants @ref esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_address_mode_t address_mode;                /*!< APS addressing mode constants, refer to esp_zb_zcl_address_mode_t */
     uint16_t group_id;                                     /*!< Group id */
 } esp_zb_zcl_groups_add_group_cmd_t;
 
@@ -525,7 +648,7 @@ typedef struct esp_zb_zcl_groups_add_group_cmd_s {
  */
 typedef struct esp_zb_zcl_groups_remove_all_groups_cmd_s {
     esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                  /*!< Basic command info */
-    esp_zb_zcl_address_mode_t address_mode;                /*!< APS addressing mode constants @ref esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_address_mode_t address_mode;                /*!< APS addressing mode constants, refer to esp_zb_zcl_address_mode_t */
 } esp_zb_zcl_groups_remove_all_groups_cmd_t;
 
 /**
@@ -536,7 +659,7 @@ typedef struct esp_zb_zcl_groups_remove_all_groups_cmd_s {
  */
 typedef struct esp_zb_zcl_groups_get_group_membership_cmd_s {
     esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                  /*!< Basic command info */
-    esp_zb_zcl_address_mode_t address_mode;                /*!< APS addressing mode constants @ref esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_address_mode_t address_mode;                /*!< APS addressing mode constants, refer to esp_zb_zcl_address_mode_t */
     uint8_t group_count;                                   /*!< Total group count */
     uint16_t *group_list;                                  /*!< Maximum group list */
 } esp_zb_zcl_groups_get_group_membership_cmd_t;
@@ -661,37 +784,136 @@ typedef struct esp_zb_zcl_ias_zone_enroll_request_cmd_s {
 } esp_zb_zcl_ias_zone_enroll_request_cmd_t;
 
 /**
+ * @brief The Zigbee ZCL IAS_ACE Arm command struct
+ */
+typedef struct esp_zb_zcl_ias_ace_arm_cmd_s {
+    esp_zb_zcl_basic_cmd_t    zcl_basic_cmd;                   /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;                    /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_ias_ace_arm_t  payload;                         /*!< Arm command payload */
+} esp_zb_zcl_ias_ace_arm_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Bypass command struct
+ */
+typedef struct esp_zb_zcl_ias_ace_bypass_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                       /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;                     /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_ias_ace_bypass_t payload;                        /*!< Bypass command payload */
+} esp_zb_zcl_ias_ace_bypass_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_WD Start Warning command struct
+ */
+typedef struct esp_zb_zcl_ias_wd_start_warning_cmd_s {
+    esp_zb_zcl_basic_cmd_t            zcl_basic_cmd;  /*!< Basic command info */
+    esp_zb_zcl_address_mode_t         address_mode;   /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_ias_wd_start_warning_t payload;        /*!< Start Warning command payload */
+} esp_zb_zcl_ias_wd_start_warning_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_WD Squawk command struct
+ */
+typedef struct esp_zb_zcl_ias_wd_squawk_cmd_s {
+    esp_zb_zcl_basic_cmd_t     zcl_basic_cmd;  /*!< Basic command info */
+    esp_zb_zcl_address_mode_t  address_mode;   /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_ias_wd_squawk_t payload;        /*!< Squawk command payload */
+} esp_zb_zcl_ias_wd_squawk_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Emergency command struct
+ */
+typedef esp_zb_zcl_common_cmd_t esp_zb_zcl_ias_ace_emergency_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Fire command struct
+ */
+typedef esp_zb_zcl_common_cmd_t esp_zb_zcl_ias_ace_fire_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Panic command struct
+ */
+typedef esp_zb_zcl_common_cmd_t esp_zb_zcl_ias_ace_panic_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Zone ID Map command struct
+ */
+typedef esp_zb_zcl_common_cmd_t esp_zb_zcl_ias_ace_get_zone_id_map_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Zone Information command struct
+ */
+typedef struct esp_zb_zcl_ias_ace_get_zone_info_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                       /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;                     /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    uint8_t zone_id;                                            /*!< ID of the Zone to get the information */
+} esp_zb_zcl_ias_ace_get_zone_info_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Panel Status command struct
+ */
+typedef esp_zb_zcl_common_cmd_t esp_zb_zcl_ias_ace_get_panel_status_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Bypassed Zone List command struct
+ */
+typedef esp_zb_zcl_common_cmd_t esp_zb_zcl_ias_ace_get_bypassed_zone_list_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Zone Status command struct
+ */
+typedef struct esp_zb_zcl_ias_ace_get_zone_status_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                       /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;                     /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_ias_ace_get_zone_status_t payload;               /*!< Get Zone Status command payload */
+} esp_zb_zcl_ias_ace_get_zone_status_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Zone Status Changed command struct
+ */
+typedef struct esp_zb_zcl_ias_ace_zone_status_changed_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                       /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;                     /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_ias_ace_zone_status_changed_t payload;           /*!< Zone Status Changed command payload */
+} esp_zb_zcl_ias_ace_zone_status_changed_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Panel Status Changed command struct
+ */
+typedef struct esp_zb_zcl_ias_ace_panel_status_changed_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                       /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;                     /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    esp_zb_zcl_ias_ace_panel_status_changed_t payload;          /*!< Panel Status Changed command payload */
+} esp_zb_zcl_ias_ace_panel_status_changed_cmd_t;
+
+/**
  * @brief The Zigbee ZCL window covering send command struct
  *
  * @note value only support uint8_t, uint16_t data types for the Lift/Tilt value/percentage payload. If not, set to NULL
  *
  */
-typedef struct esp_zb_zcl_window_covering_cluster_send_cmd_req_s{
+typedef struct esp_zb_zcl_window_covering_cluster_send_cmd_req_s {
     esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                       /*!< Basic command info */
     esp_zb_zcl_address_mode_t address_mode;                     /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
-    void *value;                                                /*!< Pointer to value */
-    uint16_t cluster_id;                                        /*!< Cluster id */
-    uint8_t cmd_id;                                             /*!< Command id */
-}esp_zb_zcl_window_covering_cluster_send_cmd_req_t;
+    void *value;                                                /*!< Pointer to payload value of window covering command */
+    uint8_t cmd_id;                                             /*!< Command id, refer to esp_zb_zcl_window_covering_cmd_t */
+} esp_zb_zcl_window_covering_cluster_send_cmd_req_t;
 
 /**
  * @brief The Zigbee ZCL electrical profile information response command struct
  */
-typedef struct esp_zb_zcl_electrical_profile_info_cmd_resp_s{
+typedef struct esp_zb_zcl_electrical_profile_info_cmd_resp_s {
     esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                       /*!< Basic command info */
     esp_zb_zcl_address_mode_t address_mode;                     /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
     esp_zb_electrical_measurement_profile_info_t profile_info;  /*!< Electrical profile info response command */
-    uint16_t cluster_id;                                        /*!< Cluster id */
-}esp_zb_zcl_electrical_profile_info_cmd_resp_t;
+} esp_zb_zcl_electrical_profile_info_cmd_resp_t;
 
 /**
  * @brief The Zigbee ZCL electrical profile response command struct
  */
-typedef struct esp_zb_zcl_electrical_measurement_profile_cmd_resp_s{
+typedef struct esp_zb_zcl_electrical_measurement_profile_cmd_resp_s {
     esp_zb_zcl_basic_cmd_t zcl_basic_cmd;                        /*!< Basic command info */
     esp_zb_zcl_address_mode_t address_mode;                      /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
     esp_zb_electrical_measurement_profile_t profile;             /*!< Electrical profile response command */
-    uint16_t cluster_id;                                         /*!< Cluster id */
 } esp_zb_zcl_electrical_measurement_profile_cmd_resp_t;
 
 /**
@@ -790,6 +1012,41 @@ typedef struct esp_zb_metering_get_sampled_data_cmd_s {
     uint16_t number_of_samples;                    /*!< This filed represents the number of samples being requested. This value cannot exceed the size stipulated in the MaxNumberOfSamples field.
                                                         If fewer samples are available for the time period, only those available are returned */
 } esp_zb_metering_get_sampled_data_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL price get current price command struct
+ */
+typedef struct esp_zb_zcl_price_get_current_price_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;     /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;   /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    uint8_t command_options;                  /*!< Zero bit is Requestor Rx On When Idle, others are reserved. */
+} esp_zb_zcl_price_get_current_price_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL price get scheduled prices command struct
+ */
+typedef struct esp_zb_zcl_price_get_scheduled_prices_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;       /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;     /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    uint32_t start_time;                        /*!< UTC timestamp represents the minimum ending time for any scheduled or
+                                                 *   currently active pricing events to be resent.
+                                                 *   @note Value 0x00000000 will be replaced with the current time stamp.
+                                                 */
+    uint8_t  number_of_events;                  /*!< NumberOfEvents represents the maximum number of events to be sent.
+                                                 *   @note Value 0 indicates no maximum limit.
+                                                 */
+} esp_zb_zcl_price_get_scheduled_prices_cmd_t;
+
+/**
+ * @brief The Zigbee ZCL price get tier labels command struct
+ */
+typedef struct esp_zb_zcl_price_get_tier_labels_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd;       /*!< Basic command info */
+    esp_zb_zcl_address_mode_t address_mode;     /*!< APS addressing mode constants refer to esp_zb_zcl_address_mode_t */
+    uint32_t issuer_tariff_id;                  /*!< Unique identifier generated by the commodity supplier.
+                                                 *   This is used to identify the tariff that the labels apply to.
+                                                 */
+} esp_zb_zcl_price_get_tier_labels_cmd_t;
 
 /**
  * @brief The Zigbee ZCL custom cluster command struct
@@ -954,6 +1211,173 @@ typedef struct esp_zb_zcl_ias_zone_enroll_response_message_s {
 } esp_zb_zcl_ias_zone_enroll_response_message_t;
 
 /**
+ * @brief The Zigbee ZCL IAS_ACE Arm Response message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_arm_response_message_s {
+    esp_zb_device_cb_common_info_t info;            /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_arm_resp_t *msg_in;    /*!< Received Arm Response command payload */
+} esp_zb_zcl_ias_ace_arm_response_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Zone ID Map Response message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_get_zone_id_map_response_message_s {
+    esp_zb_device_cb_common_info_t info;                        /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_get_zone_id_map_resp_t *msg_in;    /*!< Received Get Zone ID Map Response command payload */
+} esp_zb_zcl_ias_ace_get_zone_id_map_response_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Zone Information Response message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_get_zone_info_response_message_s {
+    esp_zb_device_cb_common_info_t info;                        /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_get_zone_info_resp_t *msg_in;      /*!< Received Get Zone Information Response command payload */
+} esp_zb_zcl_ias_ace_get_zone_info_response_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Zone Status Changed message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_zone_status_changed_message_s {
+    esp_zb_device_cb_common_info_t info;                        /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_zone_status_changed_t *msg_in;     /*!< Received Zone Status Changed command payload */
+} esp_zb_zcl_ias_ace_zone_status_changed_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Panel Status Changed message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_panel_status_changed_message_s {
+    esp_zb_device_cb_common_info_t info;                        /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_panel_status_changed_t *msg_in;    /*!< Received Panel Status Changed command payload */
+} esp_zb_zcl_ias_ace_panel_status_changed_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Panel Status Response message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_get_panel_status_response_message_s {
+    esp_zb_device_cb_common_info_t info;                        /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_get_panel_status_resp_t *msg_in;   /*!< Received Get Panel Status Response command payload */
+} esp_zb_zcl_ias_ace_get_panel_status_response_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Set Bypassed Zone List message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_set_bypassed_zone_list_message_s {
+    esp_zb_device_cb_common_info_t info;                        /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_set_bypassed_zone_list_t *msg_in;  /*!< Received Set Bypassed Zone List command payload */
+} esp_zb_zcl_ias_ace_set_bypassed_zone_list_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Bypass Response message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_bypass_response_message_s {
+    esp_zb_device_cb_common_info_t info;                /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_bypass_resp_t *msg_in;     /*!< Received Bypass Response command payload */
+} esp_zb_zcl_ias_ace_bypass_response_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Zone Status Response message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_get_zone_status_response_message_s {
+    esp_zb_device_cb_common_info_t info;                        /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_get_zone_status_resp_t *msg_in;    /*!< Received Get Zone Status Response command payload */
+} esp_zb_zcl_ias_ace_get_zone_status_response_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Arm message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_arm_message_s {
+    esp_zb_device_cb_common_info_t info;    /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_arm_t *msg_in; /*!< Received Arm command payload */
+    esp_zb_zcl_ias_ace_arm_resp_t *msg_out; /*!< Response of Arm command to be sent */
+} esp_zb_zcl_ias_ace_arm_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Bypass message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_bypass_message_s {
+    esp_zb_device_cb_common_info_t info;        /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_bypass_t *msg_in;  /*!< Received Bypass command payload */
+    esp_zb_zcl_ias_ace_bypass_resp_t *msg_out;  /*!< Response of Bypass command to be sent */
+} esp_zb_zcl_ias_ace_bypass_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Emergency message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_emergency_message_s {
+    esp_zb_device_cb_common_info_t info;        /*!< The common information for Zigbee device callback */
+} esp_zb_zcl_ias_ace_emergency_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Fire message struct
+ *
+ */
+typedef esp_zb_zcl_ias_ace_emergency_message_t esp_zb_zcl_ias_ace_fire_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Panic message struct
+ *
+ */
+typedef esp_zb_zcl_ias_ace_emergency_message_t esp_zb_zcl_ias_ace_panic_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Panel Status message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_get_panel_status_message_s {
+    esp_zb_device_cb_common_info_t info;                    /*!< The common information for Zigbee device callback */
+    esp_zb_zcl_ias_ace_get_panel_status_resp_t *msg_out;    /*!< Response of Get Panel Status command to be sent */
+} esp_zb_zcl_ias_ace_get_panel_status_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Bypassed Zone List message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_get_bypassed_zone_list_message_s {
+    esp_zb_device_cb_common_info_t info;                            /*!< The common information for Zigbee device callback */
+    esp_zb_zcl_ias_ace_set_bypassed_zone_list_message_t *msg_out;   /*!< Response of Get Bypassed Zone List command to be sent */
+} esp_zb_zcl_ias_ace_get_bypassed_zone_list_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_ACE Get Zone Status message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_ace_get_zone_status_message_s {
+    esp_zb_device_cb_common_info_t info;                    /*!< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_ace_get_zone_status_t *msg_in;     /*!< Received Get Zone Status command payload */
+    esp_zb_zcl_ias_ace_get_zone_status_resp_t *msg_out;     /*!< Response of Get Zone Status command to be sent */
+} esp_zb_zcl_ias_ace_get_zone_status_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_WD Start Warning message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_wd_start_warning_message_s {
+    esp_zb_device_cb_common_info_t info;                /**< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_wd_start_warning_t *msg_in;    /**< Received Start Warning command, refer to esp_zb_zcl_ias_wd_start_warning_t */
+} esp_zb_zcl_ias_wd_start_warning_message_t;
+
+/**
+ * @brief The Zigbee ZCL IAS_WD Squawk message struct
+ *
+ */
+typedef struct esp_zb_zcl_ias_wd_squawk_message_s {
+    esp_zb_device_cb_common_info_t info;        /**< The common information for Zigbee device callback */
+    const esp_zb_zcl_ias_wd_squawk_t *msg_in;   /**< Received Squawk command, refer to esp_zb_zcl_ias_wd_squawk_t */
+} esp_zb_zcl_ias_wd_squawk_message_t;
+
+/**
  * @brief The Zigbee zcl ota upgrade value device callback message struct
  *
  */
@@ -964,6 +1388,21 @@ typedef struct esp_zb_zcl_ota_upgrade_value_message_s {
     uint16_t payload_size;                           /*!< The OTA payload size */
     uint8_t *payload;                                /*!< The OTA payload */
 } esp_zb_zcl_ota_upgrade_value_message_t;
+
+/**
+ * @brief The Zigbee zcl ota upgrade client query image response message struct
+ *
+ */
+typedef struct esp_zb_zcl_ota_upgrade_query_image_resp_message_s {
+    esp_zb_device_cb_common_info_t info;    /*!< The common information for Zigbee device callback */
+    esp_zb_zcl_addr_t server_addr;          /*!< Server address */
+    uint8_t server_endpoint;                /*!< Server endpoint */
+    uint8_t query_status;                   /*!< Status, see esp_zb_zcl_status_t */
+    uint16_t manufacturer_code;             /*!< Manufacturer code */
+    uint16_t image_type;                    /*!< Image type */
+    uint32_t file_version;                  /*!< File version */
+    uint32_t image_size;                    /*!< Image size */
+} esp_zb_zcl_ota_upgrade_query_image_resp_message_t;
 
 /**
  * @brief The Zigbee zcl ota upgrade server status message struct
@@ -1014,7 +1453,7 @@ typedef struct esp_zb_zcl_frame_header_s {
     uint8_t fc;          /*!< A 8-bit Frame control */
     uint16_t manuf_code; /*!< Manufacturer code */
     uint8_t tsn;         /*!< Transaction sequence number */
-    uint8_t rssi;        /*!< Signal strength */
+    int8_t rssi;         /*!< Signal strength */
 } esp_zb_zcl_frame_header_t;
 
 /**
@@ -1066,7 +1505,7 @@ typedef struct esp_zb_zcl_metering_get_profile_resp_message_s {
 typedef struct esp_zb_zcl_metering_request_fast_poll_mode_resp_info_offered_s {
     uint8_t applied_update_period_in_seconds; /*!< The period at which metering data shall be updated, shall be greater than or equal to the minimum FastPollUpdatePeriod Attribute
                                                    and less than or equal to the FastPollUpdatePeriod in RequestFastPollMode command */
-    uint32_t fast_poll_mode_end_time;         /*!< UTC time that indicates when the metering server will terminate fast poll mode 
+    uint32_t fast_poll_mode_end_time;         /*!< UTC time that indicates when the metering server will terminate fast poll mode
                                                    and resume updating at the rate specified by DefaultUpdatePeriod */
 } esp_zb_zcl_metering_request_fast_poll_mode_resp_info_offered_t;
 
@@ -1090,7 +1529,7 @@ typedef struct esp_zb_zcl_metering_request_fast_poll_mode_resp_message_s {
     esp_zb_device_cb_common_info_t info;      /*!< The common information for Zigbee device callback */
     uint8_t applied_update_period_in_seconds; /*!< The period at which metering data shall be updated, shall be greater than or equal to the minimum FastPollUpdatePeriod Attribute
                                                    and less than or equal to the FastPollUpdatePeriod in 'RequestFastPollMode' command */
-    uint32_t fast_poll_mode_end_time;         /*!< UTC time that indicates when the metering server will terminate fast poll mode 
+    uint32_t fast_poll_mode_end_time;         /*!< UTC time that indicates when the metering server will terminate fast poll mode
                                                    and resume updating at the rate specified by DefaultUpdatePeriod */
 } esp_zb_zcl_metering_request_fast_poll_mode_resp_message_t;
 
@@ -1224,7 +1663,7 @@ typedef union esp_zb_zcl_metering_snapshot_sub_payload_s{
     esp_zb_zcl_metering_tou_received_no_billing_payload_t tou_received_no_billing;                 /*!< @ref esp_zb_zcl_metering_tou_received_no_billing_payload_s */
     esp_zb_zcl_metering_block_tier_delivered_no_billing_payload_t block_tier_delivered_no_billing; /*!< @ref esp_zb_zcl_metering_block_tier_delivered_no_billing_payload_s */
     esp_zb_zcl_metering_block_tier_received_no_billing_payload_t block_tier_received_no_billing;   /*!< @ref esp_zb_zcl_metering_block_tier_received_no_billing_payload_s */
-} ESP_ZB_PACKED_STRUCT esp_zb_zcl_metering_snapshot_sub_payload_t; 
+} ESP_ZB_PACKED_STRUCT esp_zb_zcl_metering_snapshot_sub_payload_t;
 
 /**
  * @brief The Zigbee zcl metering snapshot struct
@@ -1317,6 +1756,175 @@ typedef struct esp_zb_zcl_metering_get_sampled_data_resp_message_s {
 } esp_zb_zcl_metering_get_sampled_data_resp_message_t;
 
 /**
+ * @brief The Zigbee zcl price publish price struct
+ */
+typedef struct esp_zb_zcl_price_publish_price_s {
+    /* Mandatory fields. */
+    uint32_t provider_id;                     /*!< Unique identifier for the commodity provider. */
+    uint8_t  rate_label[13];                  /*!< Commodity provider-specific information regarding the current billing rate. */
+    uint32_t issuer_event_id;                 /*!< Unique identifier generated by the commodity provider allows devices to determine which pricing information is newer. */
+    uint32_t current_time;                    /*!< UTC Time field containing the current time as determined by the device. */
+    uint8_t  unit_of_measure;                 /*!< Field identifying the commodity as well as this base units of measure. */
+    uint16_t currency;                        /*!< Field identifying information concerning the local unit of currency used in the price field. */
+    uint32_t price_trailing_digit : 4;        /*!< Determines where the decimal point is located in the price field */
+    uint32_t price_tier : 4;                  /*!< Indicates the current price tier as chosen by the commodity provider */
+    uint32_t number_of_price_tiers : 4;       /*!< Represents the maximum number of price tiers available. */
+    uint32_t register_tier : 4;               /*!< Indicates the register tier used with the current Price Tier. */
+    uint32_t start_time;                      /*!< Denotes the time at which the signal becomes valid. Value 0x00000000 is a special time denoting "now". */
+    uint16_t duration_in_minutes;             /*!< Denotes amount of time in minutes after Start Time during which the price signal is valid. */
+    uint32_t price;                           /*!< Contains the price of the commodity measured in base unit of Currency per Unit of Measure with the decimal point located as indicated by the Price Trailing Digit field when the commodity is delivered to premises. */
+    /* Optional fields. */
+    uint8_t  price_ratio;                     /*!< Gives the ratio of the price denoted in the Price field to the "normal" price, chosen by the commodity provider. */
+    uint32_t generation_price;                /*!< Contains the price of the commodity measured in base unit of Currency per Unit of Measure with the decimal point located as indicated by the Price Trailing Digit field when the commodity is received from premises. */
+    uint8_t  generation_price_ratio;          /*!< Gives the ratio of the price denoted in the Generation Price field to the "normal" price, chosen by the commodity provider. */
+    uint32_t alternate_cost_delivered;        /*!< Provides mechanism to describe an alternative measure of the cost of the energy consumed. */
+    uint8_t  alternate_cost_unit;             /*!< Identifies the unit for Alternate Cost Delivered field */
+    uint8_t  alternate_cost_trailing_digit;   /*!< Determines where the decimal point is located in the alternate cost field. */
+    uint8_t  number_of_block_thresholds;      /*!< Indicates the number of block thresholds available. */
+    uint8_t  price_control;                   /*!< Identifies additional control options (PriceAcknowledgement policy and total number of tier flag). */
+    uint8_t  number_of_generation_tiers;      /*!< Specifies the total number of generation tiers applicable in the current tariff. */
+    uint8_t  generation_tier;                 /*!< Specifies the current generation tier. */
+    uint8_t  extended_number_of_price_tiers;  /*!< Indicates a maximum number of tier available. */
+    uint8_t  extended_price_tier;             /*!< Indicates the current price tier. */
+    uint8_t  extended_register_tier;          /*!< Indicates the register tier used with the current Price Tier. */
+} ESP_ZB_PACKED_STRUCT esp_zb_zcl_price_publish_price_t;
+
+/**
+ * @brief The Zigbee zcl price get current price callback message struct
+ *
+ */
+typedef struct esp_zb_zcl_price_get_current_price_message_s {
+    esp_zb_device_cb_common_info_t info;                    /*!< The common information for Zigbee device callback */
+    uint8_t command_options;                                /*!< Zero bit is Requestor Rx On When Idle, others are reserved. */
+    uint8_t resp_count;                                     /*!< Number of prices in `resp_info_offered` to be responded. */
+    esp_zb_zcl_price_publish_price_t *resp_info_offered;    /*!< The info used for 'PublishPrice' command, to response 'GetCurrent' command.
+                                                             *   The info SHOULD be offered by user, otherwise, the response has no sense */
+} esp_zb_zcl_price_get_current_price_message_t;
+
+/**
+ * @brief The Zigbee zcl price get scheduled prices callback message struct
+ *
+ */
+typedef struct esp_zb_zcl_price_get_scheduled_prices_message_s {
+    esp_zb_device_cb_common_info_t info;                    /*!< The common information for Zigbee device callback */
+    uint32_t start_time;                                    /*!< The minimum ending time for any scheduled or currently active pricing events to be resent.
+                                                             *   @note Value  0x00000000 will be replaced with the current time stamp.
+                                                             */
+    uint8_t number_of_events;                               /*!< The maximum number of events to be sent. Value 0 indicates no maximum limit. */
+    uint8_t resp_count;                                     /*!< Number of prices in `resp_info_offered` to be responded. */
+    esp_zb_zcl_price_publish_price_t *resp_info_offered;    /*!< The info used for 'PublishPrice' command, to response 'GetCurrent' command.
+                                                             *   The info SHOULD be offered by user, otherwise, the response has no sense.
+                                                             */
+} esp_zb_zcl_price_get_scheduled_prices_message_t;
+
+/**
+ * @brief The Zigbee zcl price publish price callback message struct
+ *
+ */
+typedef struct esp_zb_zcl_price_publish_price_message_s {
+    esp_zb_device_cb_common_info_t info;                    /*!< The common information for Zigbee device callback */
+    esp_zb_zcl_price_publish_price_t price;                 /*!< Recived publish price information */
+} esp_zb_zcl_price_publish_price_message_t;
+
+/**
+ * @brief The Zigbee zcl price acknowledgement callback message struct
+ *
+ */
+typedef struct esp_zb_zcl_price_ack_message_s {
+    esp_zb_device_cb_common_info_t info;                    /*!< The common information for Zigbee device callback */
+    uint32_t provider_id;                                   /*!< Unique identifier for the commodity provider. */
+    uint32_t issuer_event_id;                               /*!< Unique identifier generated by the commodity provider. */
+    uint32_t current_time;                                  /*!< This field containing the current time as determined by the device. */
+    uint8_t price_control;                                  /*!< Identifies additional control options (PriceAcknowledgement policy and
+                                                             *   total number of tier flag).
+                                                             */
+} esp_zb_zcl_price_ack_message_t;
+
+/**
+ * @brief The Zigbee ZCL price tier label entry struct
+ */
+typedef struct esp_zb_zcl_price_tier_label_entry_s {
+    uint8_t tier_id;                                        /*!< The tier number that the associated TierLabel applies to. */
+    uint8_t tier_label[13];                                 /*!< Octet String field capable of storing a 12 character string (the first
+                                                             *   character indicates the string length, represented in hexadecimal format)
+                                                             *   encoded in the UTF-8 format.
+                                                             */
+} ESP_ZB_PACKED_STRUCT esp_zb_zcl_price_tier_label_entry_t;
+
+/**
+ * @brief The Zigbee ZCL price publish tier labels information struct
+ */
+typedef struct esp_zb_price_publish_tier_labels_info_s {
+    uint32_t provider_id;                                   /*!< An unsigned 32-bit field containing a unique identifier for the commodity provider. */
+    uint32_t issuer_event_id;                               /*!< Unique identifier generated by the commodity provider. */
+    uint32_t issuer_tariff_id;                              /*!< Unique identifier generated by the commodity supplier. */
+    uint8_t number_of_labels;                               /*!< The number of TierID/Tier Label sets contained within the command. */
+    esp_zb_zcl_price_tier_label_entry_t *tier_labels;       /*!< Tier labels need to be published in the command */
+} esp_zb_price_publish_tier_labels_info_t;
+
+/**
+ * @brief The Zigbee ZCL price publish tier labels callback message struct
+ */
+typedef struct esp_zb_zcl_price_get_tier_labels_message_s {
+    esp_zb_device_cb_common_info_t info;                            /*!< The common information for Zigbee device callback */
+    uint32_t issuer_tariff_id;                                      /*!< Unique identifier generated by the commodity supplier. */
+    esp_zb_price_publish_tier_labels_info_t resp_info_offered;      /*!< Information of the response */
+} esp_zb_zcl_price_get_tier_labels_message_t;
+
+/**
+ * @brief The Zigbee ZCL price publish tier labels callback message struct
+ */
+typedef struct esp_zb_zcl_price_publish_tier_labels_message_s {
+    esp_zb_device_cb_common_info_t info;                    /*!< The common information for Zigbee device callback */
+    uint32_t provider_id;                                   /*!< An unsigned 32-bit field containing a unique identifier for the commodity provider. */
+    uint32_t issuer_event_id;                               /*!< Unique identifier generated by the commodity provider. */
+    uint32_t issuer_tariff_id;                              /*!< Unique identifier generated by the commodity supplier. */
+    uint8_t command_index;                                  /*!< This is used to count the payload fragments in the case where the entire payload does not fit into one message. */
+    uint8_t total_number_of_commands;                       /*!< In the case where the entire payload does not fit into one message,
+                                                             *   this field indicates the total number of sub-commands in the message.
+                                                             */
+    uint8_t number_of_labels;                               /*!< The number of TierID/Tier Label sets contained within the command. */
+    esp_zb_zcl_price_tier_label_entry_t *tier_labels;       /*!< Tier labels published in the command */
+} esp_zb_zcl_price_publish_tier_labels_message_t;
+
+/**
+ * @brief The Zigbee ZCL commissioning restart device callback message struct
+ */
+typedef struct esp_zigbee_zcl_commissioning_restart_device_message_s {
+    esp_zb_device_cb_common_info_t info;                        /*!< The common information for Zigbee device callback */
+    esp_zb_zcl_commissioning_restart_device_payload_t msg_in;   /*!< Received restart device payload */
+} esp_zigbee_zcl_commissioning_restart_device_message_t;
+
+/**
+ * @brief The Zigbee ZCL commissioning startup parameters operation struct
+ */
+typedef enum {
+    ESP_ZB_ZCL_COMMISSIONING_STARTUP_PARAMETERS_OPERATION_SAVE,       /*!< Indicates to save startup parameter set */
+    ESP_ZB_ZCL_COMMISSIONING_STARTUP_PARAMETERS_OPERATION_RESTORE,    /*!< Indicates to restore startup parameter set */
+    ESP_ZB_ZCL_COMMISSIONING_STARTUP_PARAMETERS_OPERATION_ERASE,      /*!< Indicates to erase startup parameter set */
+    ESP_ZB_ZCL_COMMISSIONING_STARTUP_PARAMETERS_OPERATION_RESET,      /*!< Indicates to reset startup parameter set */
+    ESP_ZB_ZCL_COMMISSIONING_STARTUP_PARAMETERS_OPERATION_RESET_ALL,  /*!< Indicates to reset all startup parameter set */
+} esp_zb_zcl_commissioning_startup_parameters_operation_t;
+
+/**
+ * @brief The Zigbee ZCL commissioning startup parameters operation callback message struct
+ */
+typedef struct esp_zigbee_zcl_commissioning_operate_startup_parameters_message_s {
+    esp_zb_device_cb_common_info_t info;                                 /*!< The common information for Zigbee device callback */
+    esp_zb_zcl_commissioning_startup_parameters_operation_t operation;   /*!< Operation on startup parameter set */
+    uint8_t index;                                                       /*!< Index of the startup parameter set to be operated on */
+    esp_zb_zcl_status_t status;                                          /*!< Result of the operation, will be sent in the response */
+} esp_zigbee_zcl_commissioning_operate_startup_parameters_message_t;
+
+/**
+ * @brief The Zigbee ZCL commissioning startup parameters operation callback message struct
+ */
+typedef struct esp_zigbee_zcl_commissioning_command_response_message_s {
+    esp_zb_device_cb_common_info_t info;                    /*!< The common information for Zigbee device callback */
+    esp_zb_zcl_status_t status;                             /*!< Status of the received response */
+} esp_zigbee_zcl_commissioning_command_response_message_t;
+
+/**
  * @brief The Zigbee zcl door lock callback message struct
  *
  */
@@ -1344,6 +1952,29 @@ typedef struct esp_zb_zcl_identify_effect_message_s {
     uint8_t effect_id;                   /*!< The field specifies the identify effect to use, refer to esp_zb_zcl_identify_trigger_effect_s */
     uint8_t effect_variant;              /*!< The field is used to indicate which variant of the effect, indicated in the effect identifier field, SHOULD be triggered */
 } esp_zb_zcl_identify_effect_message_t;
+
+/**
+ * @brief The Zigbee zcl basic cluster reset to factory default message
+ *
+ */
+typedef struct esp_zb_zcl_basic_reset_factory_default_message_s {
+    esp_zb_device_cb_common_info_t info; /*!< The common information for Zigbee device callback */
+} esp_zb_zcl_basic_reset_factory_default_message_t;
+
+/**
+ * @brief ZCL window covering movement message
+ *
+ */
+typedef struct esp_zb_zcl_window_covering_movement_message_s {
+    esp_zb_device_cb_common_info_t info; /*!< The common information for Zigbee device callback */
+    uint16_t command;                    /*!< The movement command, refer to esp_zb_zcl_window_covering_cmd_t */
+    union {
+        uint8_t percentage_lift_value;  /*!< The payload for ESP_ZB_ZCL_CMD_WINDOW_COVERING_GO_TO_LIFT_PERCENTAGE */
+        uint8_t percentage_tilt_value;  /*!< The payload for ESP_ZB_ZCL_CMD_WINDOW_COVERING_GO_TO_TILT_PERCENTAGE */
+        uint16_t lift_value;            /*!< The payload for ESP_ZB_ZCL_CMD_WINDOW_COVERING_GO_TO_LIFT_VALUE */
+        uint16_t tilt_value;            /*!< The payload for ESP_ZB_ZCL_CMD_WINDOW_COVERING_GO_TO_TILT_VALUE */
+    } payload;                          /*!< Command payload */
+} esp_zb_zcl_window_covering_movement_message_t;
 
 /**
  * @brief The Zigbee zcl command basic application information struct
@@ -1550,9 +2181,10 @@ typedef struct esp_zb_zcl_scenes_get_scene_membership_resp_message_s {
     uint8_t scene_count;        /*!< The Number of scenes(Optional) */
     uint8_t *scene_list;        /*!< The Array of scenes corresponding to the group identifier(Optional) */
 } esp_zb_zcl_scenes_get_scene_membership_resp_message_t;
+
 /**
  * @brief The Zigbee ZCL IAS Zone enroll request message struct
- * 
+ *
  */
 typedef struct esp_zb_zcl_ias_zone_enroll_request_message_s {
     esp_zb_zcl_cmd_info_t info;                 /*!< The basic information of ias zone message that refers to esp_zb_zcl_cmd_info_t */
@@ -1562,10 +2194,10 @@ typedef struct esp_zb_zcl_ias_zone_enroll_request_message_s {
 
 /**
  * @brief The Zigbee ZCL IAS Zone status change notification response message struct
- * 
+ *
  */
 typedef struct esp_zb_zcl_ias_zone_status_change_notification_message_s {
-    esp_zb_zcl_cmd_info_t info;             /*!< The basic information of ias zone status message that refers to esp_zb_zcl_report_attr_message_t */
+    esp_zb_zcl_cmd_info_t info;             /*!< The basic information of ias zone message that refers to esp_zb_zcl_cmd_info_t */
     uint16_t zone_status;                   /*!< The zone status attribute, which can refer esp_zb_zcl_ias_zone_zonestatus_t */
     uint8_t extended_status;                /*!< Reserved for additional status information and SHALL be set to zero */
     uint8_t zone_id;                        /*!< The Zone ID is the index of the Zone in the CIE's zone table */
@@ -1578,7 +2210,7 @@ typedef struct esp_zb_zcl_ias_zone_status_change_notification_message_s {
  *
  */
 typedef struct esp_zb_zcl_privilege_command_message_s {
-    esp_zb_zcl_cmd_info_t info; /*!< The basic information of privilege command message that refers to esp_zb_zcl_report_attr_message_t */
+    esp_zb_zcl_cmd_info_t info; /*!< The basic information of privilege command message that refers to esp_zb_zcl_cmd_info_t */
     uint16_t size;              /*!< The size of data */
     void *data;                 /*!< The privilege command data */
 } esp_zb_zcl_privilege_command_message_t;
@@ -1590,7 +2222,7 @@ typedef struct esp_zb_zcl_privilege_command_message_s {
  *       For array, array16, array32, and long string data types, the first 2 bytes should represent the number of elements in the array.
  */
 typedef struct esp_zb_zcl_custom_cluster_command_message_s {
-    esp_zb_zcl_cmd_info_t info; /*!< The basic information of customized cluster command message that refers to esp_zb_zcl_report_attr_message_t */
+    esp_zb_zcl_cmd_info_t info; /*!< The basic information of customized cluster command message that refers to esp_zb_zcl_cmd_info_t */
     struct {
         uint16_t size; /*!< The size of custom data */
         void *value;   /*!< The value of custom data */
@@ -1606,6 +2238,119 @@ typedef struct esp_zb_zcl_cmd_green_power_recv_message_s {
     esp_zb_zcl_cmd_info_t info;                 /*!< The basic information of  message that refers to esp_zb_zcl_cmd_info_t */
 } esp_zb_zcl_cmd_green_power_recv_message_t;
 #endif /* CONFIG_ZB_GP_ENABLED */
+
+/**
+ * @brief The Zigbee touchlink group information record struct
+ *
+ */
+typedef struct esp_zb_touchlink_get_group_info_record_s {
+    uint16_t group_id;   /*!< The identifier of the group described by this record */
+    uint8_t group_type;  /*!< The group type shall indicate the meaning of a group in the user interface. In the current version of this specification, this value shall be set to 0x00 */
+    struct esp_zb_touchlink_get_group_info_record_s *next; /*!< Next variable */
+} esp_zb_touchlink_get_group_info_record_t;
+
+/**
+ * @brief The Zigbee ZCL touchlink commissioning get group identifiers response struct
+ *
+ */
+typedef struct esp_zb_zcl_touchlink_get_group_identifiers_resp_message_s {
+    esp_zb_zcl_cmd_info_t info; /*!< The basic information of touclink get group identifiers response that refers to esp_zb_zcl_cmd_info_t */
+    uint8_t total;           /*!< The total number of group identifiers supported by the device */
+    uint8_t start_idx;       /*!< The internal starting index from which the following group identifiers are taken */
+    uint8_t count;           /*!< The number of entries in the group information record list field */
+    esp_zb_touchlink_get_group_info_record_t *group_info_record_list;  /*!< Group information record list , {{Group identifier, Group type}, ... , {Group identifier, Group type}} */
+} esp_zb_touchlink_get_group_identifiers_resp_message_t;
+
+/**
+ * @brief The Zigbee touchlink endpoint list record struct
+ *
+ */
+typedef struct esp_zb_touchlink_get_endpoint_list_record_s {
+    uint16_t addr_short; /*!< The short network address of the device specified by the current endpoint information record */
+    uint8_t endpoint;    /*!< The identifier of the endpoint on the device specified by the network address field */
+    uint16_t profile_id; /*!< The identifier of the profile supported on the endpoint */
+    uint16_t device_id;  /*!< The identifier of the device description supported on the endpoint */
+    uint8_t version;     /*!< Specifies the version of the device description supported by the sub-device on the endpoin */
+    struct esp_zb_touchlink_get_endpoint_list_record_s *next; /*!< Next variable */
+} esp_zb_touchlink_get_endpoint_list_record_t;
+
+/**
+ * @brief The Zigbee ZCL touchlink commissioning get endpoint list response struct
+ *
+ */
+typedef struct esp_zb_zcl_touchlink_get_endpoint_list_resp_message_s {
+    esp_zb_zcl_cmd_info_t info; /*!< The basic information of touclink get endpoint list response that refers to esp_zb_zcl_cmd_info_t */
+    uint8_t total;           /*!< The total number of endpoints supported by the device */
+    uint8_t start_idx;       /*!< The internal starting index from which the following list of endpoints are taken */
+    uint8_t count;           /*!< The number of entries in the endpoint information record list field */
+    esp_zb_touchlink_get_endpoint_list_record_t *endpoint_record_list;  /*!< Endpoint record list , {{Network address, Endpoint identifier, Profile identifier, Device identifier, Version},
+                                                                        ... , {Network address, Endpoint identifier, Profile identifier, Device identifier, Version}} */
+} esp_zb_zcl_touchlink_get_endpoint_list_resp_message_t;
+
+/**
+ * @brief The Zigbee ZCL touchlink commissioning endpoint information struct
+ *
+ */
+typedef struct esp_zb_touchlink_endpoint_information_record_s {
+    esp_zb_ieee_addr_t addr_long;         /*!< The IEEE address of the local device */
+    uint16_t addr_short;                  /**< The short network address of the local device */
+    uint8_t endpoint_id;                  /*!< The identifier of the local endpoint */
+    uint16_t profile_id;                  /*!< The identifier of the profile supported on the endpoint specified in the endpoint identifier field */
+    uint16_t device_id;                   /*!< The identifier of the device description supported on the endpoint specified in the endpoint identifier field */
+    uint8_t device_version;               /*!< The version of the device description supported by the sub-device on the endpoint specified by the endpoint identifier field */
+    bool is_record;                       /*!< The parameter indicates whether the endpoint information is recorded in the record list */
+} esp_zb_touchlink_endpoint_information_record_t;
+
+/**
+ * @brief The Zigbee touchlink get group identifiers request command struct
+ *
+ */
+typedef struct esp_zb_touchlink_send_get_group_identifiers_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd; /*!< Basic command info */
+    uint8_t start_index;                  /*!< The index (starting from 0) at which to start returning group identifiers. */
+} esp_zb_touchlink_send_get_group_identifiers_cmd_t;
+
+/**
+ * @brief The Zigbee touchlink get endpoint list request command struct
+ *
+ */
+typedef struct esp_zb_touchlink_send_get_endpoint_list_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd; /*!< Basic command info */
+    uint8_t start_index;                  /*!< The index (starting from 0) at which to start returning endpoint identifiers. */
+} esp_zb_touchlink_send_get_endpoint_list_cmd_t;
+
+/**
+ * @brief The Zigbee touchlink endpoint information request command struct
+ *
+ */
+typedef struct esp_zb_touchlink_send_endpoint_information_cmd_s {
+    esp_zb_zcl_basic_cmd_t zcl_basic_cmd; /*!< Basic command info */
+    uint8_t endpoint_id;                  /*!< The identifier of the local endpoint */
+    uint16_t profile_id;                  /*!< The identifier of the profile supported on the endpoint specified in the endpoint identifier field. */
+    uint16_t device_id;                   /*!< The identifier of the device description supported on the endpoint specified in the endpoint identifier field */
+    uint8_t device_version;               /*!< Device version;the most significant 4 bits shall be set to 0x0 */
+} esp_zb_touchlink_send_endpoint_information_cmd_t;
+
+/* @brief   Send touchlink get group identifiers request command
+ *
+ * @param[in] cmd_req Pointer to the get group identifiers request command, refer to esp_zb_touchlink_send_get_group_identifiers_cmd_t
+ *
+ */
+void esp_zb_touchlink_send_get_group_identifiers_cmd_req(esp_zb_touchlink_send_get_group_identifiers_cmd_t *cmd_req);
+
+/* @brief   Send touchlink get endpoint list request command
+ *
+ * @param[in] cmd_req Pointer to the get endpoint list request command, refer to esp_zb_touchlink_send_get_endpoint_list_cmd_t
+ *
+ */
+void esp_zb_touchlink_send_get_endpoint_list_cmd_req(esp_zb_touchlink_send_get_endpoint_list_cmd_t *cmd_req);
+
+/* @brief   Send touchlink endpoint information request command
+ *
+ * @param[in] cmd_req Pointer to the endpoint information request command, refer to esp_zb_touchlink_send_endpoint_information_cmd_t
+ *
+ */
+void esp_zb_touchlink_send_ep_info_cmd_req(esp_zb_touchlink_send_endpoint_information_cmd_t *cmd_req);
 
 /* read attribute, write attribute, config report and more general command will support later */
 
@@ -1631,7 +2376,7 @@ uint8_t esp_zb_zcl_write_attr_cmd_req(esp_zb_zcl_write_attr_cmd_t *cmd_req);
  * @brief   Send report attribute command
  *
  * @param[in]  cmd_req  pointer to the report attribute command @ref esp_zb_zcl_report_attr_cmd_s
- * @note Currently it supports ZCL specs defined attributes with type 8,16,32,64 bit or string.
+ * @note This function just does one-shot report ignoring the reporting configuration.
  * @return - ESP_OK on success
  *
  */
@@ -1645,6 +2390,15 @@ esp_err_t esp_zb_zcl_report_attr_cmd_req(esp_zb_zcl_report_attr_cmd_t *cmd_req);
  * @return The transaction sequence number
  */
 uint8_t esp_zb_zcl_config_report_cmd_req(esp_zb_zcl_config_report_cmd_t *cmd_req);
+
+/**
+ * @brief   Send read reporting configuration command
+ *
+ * @param[in]  cmd_req  pointer to the read report config command, @ref esp_zb_zcl_read_report_config_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_read_report_config_cmd_req(esp_zb_zcl_read_report_config_cmd_t *cmd_req);
 
 /**
  * @brief Send discover attributes command
@@ -1677,6 +2431,37 @@ uint8_t esp_zb_zcl_basic_factory_reset_cmd_req(esp_zb_zcl_basic_fact_reset_cmd_t
  */
 uint8_t esp_zb_zcl_on_off_cmd_req(esp_zb_zcl_on_off_cmd_t *cmd_req);
 
+/**
+ * @brief Send on-off Off With Effect command
+ *
+ * @note The Off With Effect command allows devices to be turned off using enhanced ways of fading
+ * @param[in] cmd_req pointer to the on-off off with effect command @ref esp_zb_zcl_on_off_off_with_effect_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_on_off_off_with_effect_cmd_req(esp_zb_zcl_on_off_off_with_effect_cmd_t *cmd_req);
+
+/**
+ * @brief Send on-off On With Recall Global Scene command
+ *
+ * @note The On With Recall Global Scene command allows the recall of the settings when the device was turned off.
+ * @param[in] cmd_req pointer to the on-off on with recall global scene command @ref esp_zb_zcl_on_off_on_with_recall_global_scene_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_on_off_on_with_recall_global_scene_cmd_req(esp_zb_zcl_on_off_on_with_recall_global_scene_cmd_t *cmd_req);
+
+/**
+ * @brief Send on-off On With Timed Off command
+ *
+ * @note The On With Timed Off command allows devices to be turned on for a specific duration with a guarded off
+         duration so that SHOULD the device be subsequently switched off.
+ * @param[in] cmd_req pointer to the on-off on with timed off command @ref esp_zb_zcl_on_off_on_with_timed_off_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_on_off_on_with_timed_off_cmd_req(esp_zb_zcl_on_off_on_with_timed_off_cmd_t *cmd_req);
+
 /* ZCL identify cluster list command */
 
 /**
@@ -1705,6 +2490,44 @@ uint8_t esp_zb_zcl_identify_trigger_effect_cmd_req(esp_zb_zcl_identify_trigger_e
  * @return The transaction sequence number
  */
 uint8_t esp_zb_zcl_identify_query_cmd_req(esp_zb_zcl_identify_query_cmd_t *cmd_req);
+
+/* ZCL commissioning cluster list command */
+
+/**
+ * @brief   Send commissioning restart device command
+ *
+ * @param[in]  cmd_req  pointer to the commissioning restart device command @ref esp_zb_zcl_comm_restart_device_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_comm_restart_device_cmd_req(esp_zb_zcl_comm_restart_device_cmd_t *cmd_req);
+
+/**
+ * @brief   Send commissioning save startup parameters command
+ *
+ * @param[in]  cmd_req  pointer to the commissioning save startup parameters command @ref esp_zb_zcl_comm_save_startup_params_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_comm_save_startup_params_cmd_req(esp_zb_zcl_comm_save_startup_params_cmd_t *cmd_req);
+
+/**
+ * @brief   Send commissioning restore startup parameters command
+ *
+ * @param[in]  cmd_req  pointer to the commissioning restore startup parameters command @ref esp_zb_zcl_comm_restore_startup_params_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_comm_restore_startup_params_cmd_req(esp_zb_zcl_comm_restore_startup_params_cmd_t *cmd_req);
+
+/**
+ * @brief   Send commissioning reset startup parameters command
+ *
+ * @param[in]  cmd_req  pointer to the commissioning reset startup parameters command @ref esp_zb_zcl_comm_reset_startup_params_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_comm_reset_startup_params_cmd_req(esp_zb_zcl_comm_reset_startup_params_cmd_t *cmd_req);
 
 /* ZCL level control cluster list command */
 
@@ -2098,6 +2921,132 @@ uint8_t esp_zb_zcl_ias_zone_status_change_notif_cmd_req(esp_zb_zcl_ias_zone_stat
 uint8_t esp_zb_zcl_ias_zone_enroll_cmd_req(esp_zb_zcl_ias_zone_enroll_request_cmd_t *cmd_req);
 
 /**
+ * @brief   Send IAS_ACE Arm command
+ *
+ * @param[in]  cmd_req  pointer to the Arm command  @ref esp_zb_zcl_ias_ace_arm_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_arm_cmd_req(esp_zb_zcl_ias_ace_arm_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Bypass command
+ *
+ * @param[in]  cmd_req  pointer to the Bypass command  @ref esp_zb_zcl_ias_ace_bypass_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_bypass_cmd_req(esp_zb_zcl_ias_ace_bypass_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Emergency command
+ *
+ * @param[in]  cmd_req  pointer to the Emergency command, refer to esp_zb_zcl_ias_ace_emergency_cmd_t
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_emergency_cmd_req(esp_zb_zcl_ias_ace_emergency_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Fire command
+ *
+ * @param[in]  cmd_req  pointer to the Fire command, refer to esp_zb_zcl_ias_ace_fire_cmd_t
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_fire_cmd_req(esp_zb_zcl_ias_ace_fire_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Panic command
+ *
+ * @param[in]  cmd_req  pointer to the Panic command, refer to esp_zb_zcl_ias_ace_panic_cmd_t
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_panic_cmd_req(esp_zb_zcl_ias_ace_panic_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Get Zone ID Map command
+ *
+ * @param[in]  cmd_req  pointer to the Get Zone ID Map command, refer to esp_zb_zcl_ias_ace_get_zone_id_map_cmd_t
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_get_zone_id_map_cmd_req(esp_zb_zcl_ias_ace_get_zone_id_map_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Get Zone Information command
+ *
+ * @param[in]  cmd_req  pointer to the Get Zone Information command, refer to esp_zb_zcl_ias_ace_get_zone_info_cmd_t
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_get_zone_information_cmd_req(esp_zb_zcl_ias_ace_get_zone_info_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Get Panel Status command
+ *
+ * @param[in]  cmd_req  pointer to the Get Panel Status command, refer to esp_zb_zcl_ias_ace_get_panel_status_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_get_panel_status_cmd_req(esp_zb_zcl_ias_ace_get_panel_status_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Get Bypassed Zone List command
+ *
+ * @param[in]  cmd_req  pointer to the Get Bypassed Zone List command, refer to esp_zb_zcl_ias_ace_get_bypassed_zone_list_cmd_t
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_get_bypassed_zone_list_cmd_req(esp_zb_zcl_ias_ace_get_bypassed_zone_list_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Get Zone Status command
+ *
+ * @param[in]  cmd_req  pointer to the Get Zone Status command, refer to esp_zb_zcl_ias_ace_get_zone_status_cmd_t
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_get_zone_status_cmd_req(esp_zb_zcl_ias_ace_get_zone_status_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Zone Status Changed command
+ *
+ * @param[in]  cmd_req  pointer to the Zone Status Changed command  @ref esp_zb_zcl_ias_ace_zone_status_changed_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_zone_status_changed_cmd_req(esp_zb_zcl_ias_ace_zone_status_changed_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_ACE Panel Status Changed command
+ *
+ * @param[in]  cmd_req  pointer to the Panel Status Changed command  @ref esp_zb_zcl_ias_ace_panel_status_changed_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_ace_panel_status_changed_cmd_req(esp_zb_zcl_ias_ace_panel_status_changed_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_WD Start Warning command
+ *
+ * @param[in]  cmd_req  pointer to the Start Warning command  @ref esp_zb_zcl_ias_wd_start_warning_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_wd_start_warning_cmd_req(esp_zb_zcl_ias_wd_start_warning_cmd_t *cmd_req);
+
+/**
+ * @brief   Send IAS_WD Squawk command
+ *
+ * @param[in]  cmd_req  pointer to the Squawk command  @ref esp_zb_zcl_ias_wd_squawk_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_ias_wd_squawk_cmd_req(esp_zb_zcl_ias_wd_squawk_cmd_t *cmd_req);
+
+/**
  * @brief   Send window covering cluster command request
  *
  * @param[in]  cmd_req  pointer to the send custom cluster command request @ref esp_zb_zcl_window_covering_cluster_send_cmd_req_s
@@ -2206,13 +3155,31 @@ uint8_t esp_zb_zcl_metering_get_snapshot_cmd_req(esp_zb_metering_get_snapshot_cm
 uint8_t esp_zb_zcl_metering_get_sampled_data_cmd_req(esp_zb_metering_get_sampled_data_cmd_t *cmd_req);
 
 /**
- * @brief   Send custom cluster command request
+ * @brief   Send price get current price command request
  *
- * @param[in]  cmd_req  pointer to the send custom cluster command request, refer to esp_zb_zcl_custom_cluster_cmd_req_t
+ * @param[in]  cmd_req  pointer to the get current price command @ref esp_zb_zcl_price_get_current_price_cmd_s
  *
  * @return The transaction sequence number
  */
-uint8_t esp_zb_zcl_custom_cluster_cmd_req(esp_zb_zcl_custom_cluster_cmd_req_t *cmd_req);
+uint8_t esp_zb_zcl_price_get_current_price_cmd_req(esp_zb_zcl_price_get_current_price_cmd_t *cmd_req);
+
+/**
+ * @brief   Send price get scheduled prices command request
+ *
+ * @param[in]  cmd_req  pointer to the get scheduled prices command @ref esp_zb_zcl_price_get_scheduled_prices_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_price_get_scheduled_prices_cmd_req(esp_zb_zcl_price_get_scheduled_prices_cmd_t *cmd_req);
+
+/**
+ * @brief   Send price get tier labels command request
+ *
+ * @param[in]  cmd_req  pointer to the get tier labels command @ref esp_zb_zcl_price_get_tier_labels_cmd_s
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_price_get_tier_labels_cmd_req(esp_zb_zcl_price_get_tier_labels_cmd_t *cmd_req);
 
 #ifdef CONFIG_ZB_GP_ENABLED
 /**
@@ -2278,6 +3245,15 @@ uint8_t esp_zgp_zcl_pairing_configuration_cmd_req(esp_zgp_zcl_pairing_configurat
 #endif /* CONFIG_ZB_GP_ENABLED */
 
 /**
+ * @brief   Send custom cluster command request
+ *
+ * @param[in]  cmd_req  pointer to the send custom cluster command request, refer to esp_zb_zcl_custom_cluster_cmd_req_t
+ *
+ * @return The transaction sequence number
+ */
+uint8_t esp_zb_zcl_custom_cluster_cmd_req(esp_zb_zcl_custom_cluster_cmd_req_t *cmd_req);
+
+/**
  * @brief   Send custom cluster command response
  *
  * @note The custom response should align in the same direction as the custom request when providing a reply.
@@ -2287,6 +3263,18 @@ uint8_t esp_zgp_zcl_pairing_configuration_cmd_req(esp_zgp_zcl_pairing_configurat
  * @return The transaction sequence number
  */
 uint8_t esp_zb_zcl_custom_cluster_cmd_resp(esp_zb_zcl_custom_cluster_cmd_resp_t *cmd_req);
+
+/**
+ * @brief Update Zigbee ZCL custom cluster handlers
+ *
+ * @param[in] obj The object of cluster handlers will be updated in the stack if the cluster ID exists; otherwise, it will be added.
+ *
+ * @return
+ *      - ESP_OK: On success
+ *      - ESP_ERR_NO_MEM: Out of memory
+ *      - ESP_ERR_INVALID_ARG: Invalid argument
+ */
+esp_err_t esp_zb_zcl_custom_cluster_handlers_update(esp_zb_zcl_custom_cluster_handlers_t obj);
 
 /**
  * @brief Start and enable the attribute reporting.

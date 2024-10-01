@@ -108,8 +108,8 @@ typedef ZB_PACKED_PRE struct zb_zgp_cluster_s
   zb_uint8_t  gps_commissioning_exit_mode; /**< @see zgp_commissioning_exit_mode_t  */
   zb_uint8_t  gps_security_level;
   zb_uint16_t gps_commissioning_window;
-  /* let's align it to 4 bytes (38 + 2) */
-  zb_uint16_t align_dummy;
+  /* let's align it to 16 bytes (38 + 10) */
+  zb_uint16_t align_dummy[5];
 } ZB_PACKED_STRUCT zb_zgp_cluster_t;
 
 typedef struct zb_zgp_tbl_array_s
@@ -2764,6 +2764,7 @@ void zb_zgp_notification_network_join_done(void);
 
 /*ZGP functionality setting */
 void zb_zgp_set_proxy_functionality(zb_uint32_t functionality, zb_uint32_t active_functionality);
+void zb_zgp_get_proxy_functionality(zb_uint32_t *functionality, zb_uint32_t *active_functionality);
 void zb_zgp_set_sink_functionality(zb_uint32_t functionality, zb_uint32_t active_functionality);
-
+void zb_zgp_get_sink_functionality(zb_uint32_t *functionality, zb_uint32_t *active_functionality);
 #endif /* ZGP_INTERNAL_H */

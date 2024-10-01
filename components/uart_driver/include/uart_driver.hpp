@@ -18,11 +18,11 @@ namespace UartDriver {
             explicit UartDriver();
             virtual ~UartDriver();
 
-            virtual esp_err_t init(uart_port_t uartPort, uart_config_t uartConfig, uint8_t rxPin, uint8_t txPin, uint8_t ctsPin, uint8_t rtsPin,
+            esp_err_t init(uart_port_t uartPort, uart_config_t uartConfig, uint8_t rxPin, uint8_t txPin, uint8_t ctsPin, uint8_t rtsPin,
             int rxBufferSize, int txBufferSize, uint8_t queueSize, QueueHandle_t *uartQueue, uint8_t flagAllocateInterrupt);
-            virtual esp_err_t sendData(uint8_t *data, size_t length);
+            esp_err_t sendData(uint8_t *data, size_t length);
 
-        protected:
+        private:
             const char *TAG = "ESP32_LOCK_UART";
     };
 }

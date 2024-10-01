@@ -9,6 +9,7 @@
 extern "C" {
 #endif
 
+#include "esp_err.h"
 #include "esp_zigbee_type.h"
 #include "esp_zigbee_zcl_basic.h"
 #include "esp_zigbee_zcl_identify.h"
@@ -20,7 +21,10 @@ extern "C" {
 #include "esp_zigbee_zcl_color_control.h"
 #include "esp_zigbee_zcl_time.h"
 #include "esp_zigbee_zcl_binary_input.h"
+#include "esp_zigbee_zcl_commissioning.h"
 #include "esp_zigbee_zcl_ias_zone.h"
+#include "esp_zigbee_zcl_ias_ace.h"
+#include "esp_zigbee_zcl_ias_wd.h"
 #include "esp_zigbee_zcl_shade_config.h"
 #include "esp_zigbee_zcl_door_lock.h"
 #include "esp_zigbee_zcl_humidity_meas.h"
@@ -29,6 +33,7 @@ extern "C" {
 #include "esp_zigbee_zcl_electrical_meas.h"
 #include "esp_zigbee_zcl_illuminance_meas.h"
 #include "esp_zigbee_zcl_pressure_meas.h"
+#include "esp_zigbee_zcl_flow_meas.h"
 #include "esp_zigbee_zcl_occupancy_sensing.h"
 #include "esp_zigbee_zcl_window_covering.h"
 #include "esp_zigbee_zcl_thermostat.h"
@@ -41,6 +46,12 @@ extern "C" {
 #include "esp_zigbee_zcl_pm2_5_measurement.h"
 #include "esp_zigbee_zcl_multistate_value.h"
 #include "esp_zigbee_zcl_metering.h"
+#include "esp_zigbee_zcl_diagnostics.h"
+#include "esp_zigbee_zcl_meter_identification.h"
+#include "esp_zigbee_zcl_price.h"
+#include "esp_zigbee_zcl_ec_measurement.h"
+#include "esp_zigbee_zcl_ph_measurement.h"
+#include "esp_zigbee_zcl_wind_speed_measurement.h"
 #ifdef ZB_ENABLE_ZGP
 #include "esp_zigbee_zcl_green_power.h"
 #endif
@@ -89,6 +100,7 @@ typedef enum {
     ESP_ZB_HA_COLOR_DIMMABLE_LIGHT_DEVICE_ID          = 0x0102,  /*!< Color Dimmable Light Device */
     ESP_ZB_HA_DIMMER_SWITCH_DEVICE_ID                 = 0x0104,  /*!< Dimmer Switch Device */
     ESP_ZB_HA_COLOR_DIMMER_SWITCH_DEVICE_ID           = 0x0105,  /*!< Color Dimmer Switch Device */
+    ESP_ZB_HA_LIGHT_SENSOR_DEVICE_ID                  = 0x0106,  /*!< Light Sensor Device */
     ESP_ZB_HA_SHADE_DEVICE_ID                         = 0x0200,  /*!< Shade */
     ESP_ZB_HA_SHADE_CONTROLLER_DEVICE_ID              = 0x0201,  /*!< Shade controller */
     ESP_ZB_HA_WINDOW_COVERING_DEVICE_ID               = 0x0202,  /*!< Window Covering client*/
@@ -158,13 +170,22 @@ typedef enum {
     ESP_ZB_ZCL_CLUSTER_ID_ILLUMINANCE_MEASUREMENT    = 0x0400U,     /*!< Illuminance measurement */
     ESP_ZB_ZCL_CLUSTER_ID_TEMP_MEASUREMENT           = 0x0402U,     /*!< Temperature measurement */
     ESP_ZB_ZCL_CLUSTER_ID_PRESSURE_MEASUREMENT       = 0x0403U,     /*!< Pressure measurement */
+    ESP_ZB_ZCL_CLUSTER_ID_FLOW_MEASUREMENT           = 0x0404U,     /*!< Flow measurement */
     ESP_ZB_ZCL_CLUSTER_ID_REL_HUMIDITY_MEASUREMENT   = 0x0405U,     /*!< Relative humidity measurement */
     ESP_ZB_ZCL_CLUSTER_ID_OCCUPANCY_SENSING          = 0x0406U,     /*!< Occupancy sensing */
+    ESP_ZB_ZCL_CLUSTER_ID_PH_MEASUREMENT             = 0x0409U,     /*!< pH measurement */
+    ESP_ZB_ZCL_CLUSTER_ID_EC_MEASUREMENT             = 0x040aU,     /*!< Electrical conductivity measurement */
+    ESP_ZB_ZCL_CLUSTER_ID_WIND_SPEED_MEASUREMENT     = 0x040bU,     /*!< Wind speed measurement */
     ESP_ZB_ZCL_CLUSTER_ID_CARBON_DIOXIDE_MEASUREMENT = 0x040dU,     /*!< Carbon dioxide measurement */
     ESP_ZB_ZCL_CLUSTER_ID_PM2_5_MEASUREMENT          = 0x042aU,     /*!< PM2.5 measurement */
     ESP_ZB_ZCL_CLUSTER_ID_IAS_ZONE                   = 0x0500U,     /*!< IAS zone */
-    ESP_ZB_ZCL_CLUSTER_ID_ELECTRICAL_MEASUREMENT     = 0x0b04U,     /*!< Electrical measurement */
+    ESP_ZB_ZCL_CLUSTER_ID_IAS_ACE                    = 0x0501U,     /*!< IAS ACE */
+    ESP_ZB_ZCL_CLUSTER_ID_IAS_WD                     = 0x0502U,     /*!< IAS WD */
+    ESP_ZB_ZCL_CLUSTER_ID_PRICE                      = 0x0700U,     /*!< Price cluster identifier. */
     ESP_ZB_ZCL_CLUSTER_ID_METERING                   = 0x0702U,     /*!< Metering */
+    ESP_ZB_ZCL_CLUSTER_ID_METER_IDENTIFICATION       = 0x0b01U,     /*!< Meter Identification cluster identifier */
+    ESP_ZB_ZCL_CLUSTER_ID_ELECTRICAL_MEASUREMENT     = 0x0b04U,     /*!< Electrical measurement */
+    ESP_ZB_ZCL_CLUSTER_ID_DIAGNOSTICS                = 0x0b05U,     /*!< Home Automation Diagnostics */
 } esp_zb_zcl_cluster_id_t;
 
 /**
@@ -299,6 +320,29 @@ typedef struct esp_zb_zcl_attr_location_info_s {
 } esp_zb_zcl_attr_location_info_t;
 
 /**
+ * @brief ZCL Cluster Check Attribute Value Handler, which should be called before attribute change and checks if new value is in correct range
+ *        and can be applied.
+ *
+ * @param[in] attr_id  ZCL Attribute ID
+ * @param[in] endpoint Device endpoint
+ * @param[in] value    Pointer to the new Attribute Value
+ *
+ * @return The result of check value whose value refer to esp_err_t
+ */
+typedef signed int (*esp_zb_zcl_cluster_check_value_callback_t)(uint16_t attr_id, uint8_t endpoint, uint8_t *value);
+
+/**
+ * @brief ZCL Cluster Write Attribute Handler, which should be called before attribute change (if any cluster-specific action needs to
+ *        be bound to attribute change, it can be placed in this handler).
+ *
+ * @param[in] endpoint   Device endpoint
+ * @param[in] attr_id    ZCL Attribute ID
+ * @param[in] new_value  Pointer to the new Attribute Value
+ * @param[in] manuf_code Manufacturer specific code
+ */
+typedef void (*esp_zb_zcl_cluster_write_attr_callback_t)(uint8_t endpoint, uint16_t attr_id, uint8_t *new_value, uint16_t manuf_code);
+
+/**
  * @brief Get the size of ZCL attribute value
  *
  * @param[in] attr_type  The data type of attribute value
@@ -319,6 +363,7 @@ uint16_t esp_zb_zcl_get_attribute_size(uint8_t attr_type, uint8_t *attr_value);
  * @return              A pointer indicates the end location in specific memory after a value has been stored
  */
 uint8_t *esp_zb_zcl_put_attribute_value(uint8_t *data_ptr, uint8_t type, uint8_t *value, uint16_t value_size);
+
 #ifdef __cplusplus
 }
 #endif
