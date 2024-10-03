@@ -49,7 +49,7 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s) {
                     
                     ESP_LOGI(TAG, "EUI: %x", (int)zigbeeDeviceConfig.ieee_addr);
 
-                    esp_zb_set_node_descriptor_manufacturer_code(0x88);
+                    //esp_zb_set_node_descriptor_manufacturer_code(0x88);
 
                     //EUI 64 and manufacturing and model id // 05 - attribute comamnd - 0 endpoint - 1, basic cluster  - 0x0000,  
             
@@ -60,10 +60,10 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s) {
                         extended_pan_id[3], extended_pan_id[2], extended_pan_id[1], extended_pan_id[0],
                         esp_zb_get_pan_id(), esp_zb_get_current_channel(), esp_zb_get_short_address());
 
-                    esp_zb_af_node_desc_t description;
+                    //esp_zb_af_node_desc_t description;
 
-                    description.manufacturer_code = 0x2586;
-                    description.node_desc_flags = esp_zb_get_short_address();
+                    //description.manufacturer_code = 0x2586;
+                    //description.node_desc_flags = esp_zb_get_short_address();
                     //description.desc_capability_field = 
 
 
@@ -79,6 +79,8 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_s) {
                     //     extended_pan_id[3], extended_pan_id[2], extended_pan_id[1], extended_pan_id[0],
                     //     esp_zb_get_pan_id(), esp_zb_get_current_channel(), esp_zb_get_short_address());
 
+                    ESP_LOGW(TAG, "Stack %s failure with %s status, steering",esp_zb_zdo_signal_to_string(sig_type), esp_err_to_name(err_status));
+                    esp_zb_scheduler_alarm((esp_zb_callback_t)esp_zb_bdb_start_top_level_commissioning, ESP_ZB_BDB_MODE_NETWORK_STEERING, 1000);
                     ESP_LOGI(TAG, "ZIGBEE ERROR %x", err_status);
                 }
         break;

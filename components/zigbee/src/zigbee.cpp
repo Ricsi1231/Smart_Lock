@@ -63,10 +63,13 @@ namespace ZigbeeComponent {
         ESP_LOGI(TAG, "Zigbee raw command callback");
         ESP_LOGI(TAG, "Zigbee raw command callback enpoint: %d", bufId);
         
+        uint8_t lockState = 0;
+
         uint8_t buf[sizeof(bufId)];
         zb_zcl_attr_addr_info_t *cmd_info = (zb_zcl_attr_addr_info_t *)zb_buf_get_tail(bufId, sizeof(zb_zcl_attr_addr_info_t));
-        
-        printf("cluster id: 0x%x, attributte> %d\n", cmd_info->cluster_id, cmd_info->attr_id);
+        zb_zcl_parsed_hdr_t *info = (zb_zcl_parsed_hdr_t *)zb_buf_get_tail(bufId, sizeof(zb_zcl_parsed_hdr_t));
+
+        printf("CMD id: 0x%x, Cluster 0x%x\n", info->cmd_id, info->cluster_id);
         
         memcpy(buf, zb_buf_begin(bufId), sizeof(buf));
         
@@ -78,9 +81,9 @@ namespace ZigbeeComponent {
 
         printf("\n");
 
-        if(cmd_info->cluster_id == 0x01 && cmd_info->attr_id == 0x00 && buf[0] == 0x01) {
+        if(cmd_info->cluster_id == ESP_ZB_ZCL_CLUSTER_ID_DOOR_LOCK && info->cmd_id == ESP_ZB_ZCL_CMD_DOOR_LOCK_UNLOCK_DOOR) {
             Lock.open();
-            
+
             ESP_LOGI(TAG, "Correct data received for open a lock");
         }
 
@@ -88,8 +91,8 @@ namespace ZigbeeComponent {
     }
 
     void Zigbee::rtosTask(void *pvParameters) {
-        char modelid[] = {13, 'E', 'S', 'P', '3', '2', 'C', '6', '-', 'L', 'o', 'c', 'k'};
-        char manufname[] = {9, 'E', 's', 'p', 'r', 'e', 's', 's', 'i', 'f'};
+        char modelid[] = {9, 'D', 'O', 'O', 'R', '_', 'L', 'O', 'C', 'K'};
+        char manufname[] = {6, 'P', 'I', 'E', 'R', 'R', 'E'};
 
         esp_zb_cfg_t zb_nwk_cfg = ESP_ZB_ZED_CONFIG();
         esp_zb_init(&zb_nwk_cfg);
@@ -159,7 +162,8 @@ namespace ZigbeeComponent {
 
         esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_STATE_ID, &test_attr);
         esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_TYPE_ID, &test_attr);
-        esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_ACTUATOR_ENABLED_ID, &test_attr);
+        esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_OPEN_PERIOD_ID, &test_attr);
+
 
         esp_zb_attribute_list_t *doorLockCluster = esp_zb_door_lock_cluster_create(&doorLockClusterConfig);
 

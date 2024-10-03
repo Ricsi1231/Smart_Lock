@@ -59,6 +59,7 @@ namespace ZigbeeComponent {
             static esp_err_t attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message);
             static esp_err_t action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message);
             static bool esp_zb_zcl_raw_command_callback(uint8_t bufId);
+            static void sendZclStatus(esp_zb_zcl_command_send_status_message_t message);
             //static zb_buf_ent_t *esp_zb_buf_get_by_id(zb_bufid_t buf); 
             //static zb_uint8_t *esp_zb_buf_get_tail(zb_bufid_t buf, zb_uint16_t size); 
 

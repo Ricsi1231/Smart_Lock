@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "main",
-    "project_version":    "7c2a06a-dirty",
+    "project_version":    "dc7a95f-dirty",
     "project_path":       "/home/ricsi/Documents/Smart_Lock",
     "idf_path":           "/home/ricsi/Documents/esp-idf",
     "build_dir":          "/home/ricsi/Documents/Smart_Lock/build",
@@ -378,15 +378,15 @@
             "target": "___idf_esp_https_server",
             "prefix": "idf",
             "dir": "/home/ricsi/Documents/esp-idf/components/esp_https_server",
-            "type": "CONFIG_ONLY",
+            "type": "LIBRARY",
             "lib": "__idf_esp_https_server",
             "reqs": [ "esp_http_server", "esp-tls" ],
             "priv_reqs": [ "lwip" ],
             "managed_reqs": [],
             "managed_priv_reqs": [],
-            "file": "",
-            "sources": [],
-            "include_dirs": []
+            "file": "/home/ricsi/Documents/Smart_Lock/build/esp-idf/esp_https_server/libesp_https_server.a",
+            "sources": [ "/home/ricsi/Documents/esp-idf/components/esp_https_server/src/https_server.c" ],
+            "include_dirs": [ "include" ]
         },
         "esp_hw_support": {
             "alias": "idf::esp_hw_support",

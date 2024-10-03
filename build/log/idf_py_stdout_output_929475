@@ -1,0 +1,107 @@
+[1/10] Performing build step for 'bootloader'
+[1/1] cd /home/ricsi/Documents/Smart_Lock/build/bootloader/esp-idf/esptool_py && /home/ricsi/.espressif/python_env/idf5.1_py3.12_env/bin/python /home/ricsi/Documents/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /home/ricsi/Documents/Smart_Lock/build/bootloader/bootloader.bin
+Bootloader binary size 0x5350 bytes. 0x2cb0 bytes (35%) free.
+[2/10] No install step for 'bootloader'
+[3/10] Completed 'bootloader'
+[4/10] Building CXX object esp-idf/zigbee/CMakeFiles/__idf_zigbee.dir/src/zigbee.cpp.obj
+In file included from /home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_trace.h:12,
+                 from /home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_core.h:14,
+                 from /home/ricsi/Documents/Smart_Lock/components/zigbee/include/zigbee.hpp:5,
+                 from /home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:1:
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:134:32: warning: attribute ignored in declaration of 'union esp_zb_zcl_cluster_s::<unnamed>' [-Wattributes]
+  134 |     ESP_ZB_PACKED_STRUCT union {
+      |                                ^
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:134:32: note: attribute for 'union esp_zb_zcl_cluster_s::<unnamed>' must follow the 'union' keyword
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:320:32: warning: attribute ignored in declaration of 'union esp_zb_endpoint_s::<unnamed>' [-Wattributes]
+  320 |     ESP_ZB_PACKED_STRUCT union {
+      |                                ^
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:320:32: note: attribute for 'union esp_zb_endpoint_s::<unnamed>' must follow the 'union' keyword
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp: In static member function 'static esp_err_t ZigbeeComponent::Zigbee::attribute_handler(const esp_zb_zcl_set_attr_value_message_t*)':
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:27:45: warning: comparison between 'const enum esp_zb_zcl_attr_type_t' and 'enum esp_zb_zcl_on_off_attr_t' [-Wenum-compare]
+   27 |             if(message->attribute.data.type == ESP_ZB_ZCL_ATTR_ON_OFF_ON_OFF_ID && message->attribute.data.type == ESP_ZB_ZCL_ATTR_TYPE_BOOL) {
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp: In static member function 'static bool ZigbeeComponent::Zigbee::esp_zb_zcl_raw_command_callback(uint8_t)':
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:66:17: warning: unused variable 'lockState' [-Wunused-variable]
+   66 |         uint8_t lockState = 0;
+      |                 ^~~~~~~~~
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp: In static member function 'static void ZigbeeComponent::Zigbee::rtosTask(void*)':
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:189:35: warning: 'void esp_zb_main_loop_iteration()' is deprecated [-Wdeprecated-declarations]
+  189 |         esp_zb_main_loop_iteration();
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_core.h:683:6: note: declared here
+  683 | void esp_zb_main_loop_iteration(void);
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp: In static member function 'static void ZigbeeComponent::Zigbee::init()':
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:229:9: warning: missing initializer for member 'esp_zb_radio_config_t::radio_uart_config' [-Wmissing-field-initializers]
+  229 |         };
+      |         ^
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:229:9: warning: missing initializer for member 'esp_zb_host_config_t::host_uart_config' [-Wmissing-field-initializers]
+[5/10] Linking C static library esp-idf/zigbee/libzigbee.a
+[6/10] Generating ld/sections.ld
+[7/10] Linking CXX executable main.elf
+[8/10] Generating binary image from built executable
+esptool.py v4.7.0
+Creating esp32c6 image...
+Merged 2 ELF sections
+Successfully created esp32c6 image.
+Generated /home/ricsi/Documents/Smart_Lock/build/main.bin
+[9/10] cd /home/ricsi/Documents/Smart_Lock/build/esp-idf/esptool_py && /home/ricsi/.espressif/python_env/idf5.1_py3.12_env/bin/python /home/ricsi/Documents/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/ricsi/Documents/Smart_Lock/build/partition_table/partition-table.bin /home/ricsi/Documents/Smart_Lock/build/main.bin
+main.bin binary size 0xaeae0 bytes. Smallest app partition is 0xe1000 bytes. 0x32520 bytes (22%) free.
+[9/10] cd /home/ricsi/Documents/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/ricsi/Documents/esp-idf -D "SERIAL_TOOL=/home/ricsi/.espressif/python_env/idf5.1_py3.12_env/bin/python;;/home/ricsi/Documents/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32c6" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/ricsi/Documents/Smart_Lock/build -P /home/ricsi/Documents/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32c6 -p /dev/ttyUSB0 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x0 bootloader/bootloader.bin 0x10000 main.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.7.0
+Serial port /dev/ttyUSB0
+Connecting....
+Chip is ESP32-C6 (QFN40) (revision v0.0)
+Features: WiFi 6, BT 5, IEEE802.15.4
+Crystal is 40MHz
+MAC: 40:4c:ca:ff:fe:4d:ba:9c
+BASE MAC: 40:4c:ca:4d:ba:9c
+MAC_EXT: ff:fe
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00000000 to 0x00005fff...
+Flash will be erased from 0x00010000 to 0x000befff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+Compressed 21328 bytes to 12944...
+Writing at 0x00000000... (100 %)
+Wrote 21328 bytes (12944 compressed) at 0x00000000 in 0.6 seconds (effective 290.7 kbit/s)...
+Hash of data verified.
+Compressed 715488 bytes to 384182...
+Writing at 0x00010000... (4 %)
+Writing at 0x0001c0a2... (8 %)
+Writing at 0x000293d3... (12 %)
+Writing at 0x00033358... (16 %)
+Writing at 0x00039bb9... (20 %)
+Writing at 0x00040aea... (25 %)
+Writing at 0x00046a48... (29 %)
+Writing at 0x0004c87a... (33 %)
+Writing at 0x000522e2... (37 %)
+Writing at 0x000582bf... (41 %)
+Writing at 0x0005e398... (45 %)
+Writing at 0x000653f2... (50 %)
+Writing at 0x0006b93d... (54 %)
+Writing at 0x00071d2c... (58 %)
+Writing at 0x00078bf5... (62 %)
+Writing at 0x000804a7... (66 %)
+Writing at 0x000872a2... (70 %)
+Writing at 0x0008fe70... (75 %)
+Writing at 0x000986e5... (79 %)
+Writing at 0x000a158c... (83 %)
+Writing at 0x000a78cb... (87 %)
+Writing at 0x000add86... (91 %)
+Writing at 0x000b3e90... (95 %)
+Writing at 0x000bb308... (100 %)
+Wrote 715488 bytes (384182 compressed) at 0x00010000 in 9.0 seconds (effective 635.0 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 136...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (136 compressed) at 0x00008000 in 0.0 seconds (effective 511.9 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
