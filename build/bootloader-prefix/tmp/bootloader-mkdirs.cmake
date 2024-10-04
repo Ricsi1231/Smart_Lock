@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 file(MAKE_DIRECTORY
-  "/home/ricsi/Documents/esp-idf/components/bootloader/subproject"
+  "/home/ricsi/esp/esp-idf/components/bootloader/subproject"
   "/home/ricsi/Documents/Smart_Lock/build/bootloader"
   "/home/ricsi/Documents/Smart_Lock/build/bootloader-prefix"
   "/home/ricsi/Documents/Smart_Lock/build/bootloader-prefix/tmp"

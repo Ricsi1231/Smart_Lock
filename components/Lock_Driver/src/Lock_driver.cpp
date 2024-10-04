@@ -68,4 +68,35 @@ namespace LockSystem {
         espCheck = uart.sendData(payload, dataLen);
         return espCheck;
     }
+
+    esp_err_t Lock::turnOffAutomaticLatch() {
+        esp_err_t espCheck = ESP_OK;
+
+        uint8_t dataLen = 0;
+
+        // uint8_t payload1[] = {
+        //     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x55, 0xAA, 0x03, 0x55, 0xAA, 0x00, 0x00, 0x00, 0x01, //* Wakeup
+        //     0x55, 0xAA, 0x03, 0x00, 0x23, 0x00, 0x00, 0x00, 0x07, 0x08, 0x01, 0x01, 0x01
+        // };
+
+        uint8_t wakeup[] = {
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x55, 0xAA, 0x03, 0x55, 0xAA, 0x00, 0x00, 0x00, 0x01 //* Wakeup
+        };
+
+        uint8_t disableLatch[] = {
+            0x55, 0xAA, 0x03, 0x00, 0x23, 0x00, 0x00
+        };
+        
+        dataLen = sizeof(wakeup);
+
+        espCheck = uart.sendData(wakeup, dataLen);
+
+        dataLen = sizeof(disableLatch);
+
+        vTaskDelay(50 / portTICK_PERIOD_MS);
+
+        espCheck = uart.sendData(disableLatch, dataLen);
+        
+        return espCheck;
+    }
 }

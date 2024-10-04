@@ -5,12 +5,10 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif
 #include "zboss_api.h"
 #include "zboss_api_buf.h"
-#ifdef __cplusplus
-}
 #endif
+}
 
 const char *TAG = "ESP32_LOCK_UART";
 
@@ -87,6 +85,20 @@ namespace ZigbeeComponent {
             ESP_LOGI(TAG, "Correct data received for open a lock");
         }
 
+        zb_uint8_t param = buf[0];
+        zb_uint8_t status = 0x01;
+
+        esp_zb_zcl_on_off_cmd_t onOffInfo;
+
+        onOffInfo.address_mode = ESP_ZB_APS_ADDR_MODE_DST_ADDR_ENDP_NOT_PRESENT;
+        onOffInfo.on_off_cmd_id = ESP_ZB_ZCL_CMD_DOOR_LOCK_UNLOCK_DOOR;
+        onOffInfo.zcl_basic_cmd.dst_endpoint = HA_ESP_LOCK_ENDPOINT;
+        onOffInfo.zcl_basic_cmd.src_endpoint = HA_ESP_LOCK_ENDPOINT;
+
+        esp_zb_zcl_on_off_cmd_req(&onOffInfo);
+
+        zb_zcl_send_default_handler(param, info, status);
+
         return false;
     }
 
@@ -113,8 +125,6 @@ namespace ZigbeeComponent {
 
         esp_zb_attribute_list_t *esp_zb_basic_cluster = esp_zb_zcl_attr_list_create(ESP_ZB_ZCL_CLUSTER_ID_BASIC);
         
-        // // esp_zb_cluster_add_attr(doorCluster, ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_STATE_ID, test_attr);
-
         esp_zb_basic_cluster_add_attr(esp_zb_basic_cluster, ESP_ZB_ZCL_ATTR_BASIC_ZCL_VERSION_ID, &test_attr);
         esp_zb_basic_cluster_add_attr(esp_zb_basic_cluster, ESP_ZB_ZCL_ATTR_BASIC_POWER_SOURCE_ID, &test_attr2);
         
@@ -164,7 +174,6 @@ namespace ZigbeeComponent {
         esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_TYPE_ID, &test_attr);
         esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_OPEN_PERIOD_ID, &test_attr);
 
-
         esp_zb_attribute_list_t *doorLockCluster = esp_zb_door_lock_cluster_create(&doorLockClusterConfig);
 
         esp_zb_cluster_list_add_on_off_cluster(esp_zb_cluster_list, doorLockCluster, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE);
@@ -180,47 +189,13 @@ namespace ZigbeeComponent {
         
         esp_zb_raw_command_handler_register(esp_zb_zcl_raw_command_callback);
         esp_zb_core_action_handler_register(action_handler);
-        // // esp_zb_identify_notify_handler_register(HA_ESP_LOCK_ENDPOINT, esp_zb_zcl_reset_default_attr_callback);
-        
+
         //! CLUSTER LIST CONFIGURATION AND CALLBACK FUNCTION REGISTRATION
 
         ESP_ERROR_CHECK(esp_zb_start(false));
         
         esp_zb_main_loop_iteration();
     }
-
-    // void Zigbee::rtosTask(void *pvParameter) {
-    //     char modelid[] = {13, 'E', 'S', 'P', '3', '2', 'C', '6', '.', 'L', 'i', 'g', 'h', 't'};
-    //     char manufname[] = {9, 'E', 's', 'p', 'r', 'e', 's', 's', 'i', 'f'};
-
-    //     esp_zb_cfg_t zigbee_network_config = ESP_ZB_ZED_CONFIG();
-    //     esp_zb_init(&zigbee_network_config);
-
-    //     esp_zb_door_lock_cfg_t doorLockConfigure = ESP_ZB_DEFAULT_DOOR_LOCK_CONFIG();
-    //     esp_zb_ep_list_t  *ep_list = esp_zb_door_lock_ep_create(HA_ESP_LOCK_ENDPOINT, &doorLockConfigure);
-
-    //     esp_zb_device_register(ep_list);
-    //     esp_zb_core_action_handler_register(action_handler);
-    //     esp_zb_set_primary_network_channel_set(ESP_ZB_PRIMARY_CHANNEL_MASK);
-
-    //     esp_zb_attribute_list_t *esp_zb_basic_cluster = esp_zb_zcl_attr_list_create(ESP_ZB_ZCL_CLUSTER_ID_BASIC);
-    //     esp_zb_basic_cluster->attribute = 0x0005;
-    //     esp_zb_basic_cluster->cluster_id = 0x0000;
-    //     esp_zb_basic_cluster->next = nullptr;
-
-
-    // esp_zb_basic_cluster_add_attr(esp_zb_basic_cluster, ESP_ZB_ZCL_ATTR_BASIC_MODEL_IDENTIFIER_ID, &modelid[0]);
-
-    //         esp_zb_basic_cluster_add_attr(esp_zb_basic_cluster, ESP_ZB_ZCL_ATTR_BASIC_MANUFACTURER_NAME_ID, &manufname[0]);
-
-    //         esp_zb_attribute_list_t *esp_zb_identify_cluster = esp_zb_zcl_attr_list_create(ESP_ZB_ZCL_CLUSTER_ID_IDENTIFY);
-
-    //     ESP_ERROR_CHECK(esp_zb_start(false));
-
-    //     Lock.init(UART_RX_PIN, UART_TX_PIN);
-
-    //     esp_zb_main_loop_iteration();
-    // }
 
     void Zigbee::init() {
         esp_zb_platform_config_t zigbee_config = {
@@ -230,6 +205,7 @@ namespace ZigbeeComponent {
 
         Lock.init(UART_RX_PIN, UART_TX_PIN);
         Lock.setKey();
+        Lock.turnOffAutomaticLatch();
 
         ESP_ERROR_CHECK(nvs_flash_init());
         ESP_ERROR_CHECK(esp_zb_platform_config(&zigbee_config));

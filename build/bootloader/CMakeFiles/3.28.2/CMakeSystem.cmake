@@ -1,9 +1,9 @@
-set(CMAKE_HOST_SYSTEM "Linux-6.10.9-200.fc40.x86_64")
+set(CMAKE_HOST_SYSTEM "Linux-6.10.11-200.fc40.x86_64")
 set(CMAKE_HOST_SYSTEM_NAME "Linux")
-set(CMAKE_HOST_SYSTEM_VERSION "6.10.9-200.fc40.x86_64")
+set(CMAKE_HOST_SYSTEM_VERSION "6.10.11-200.fc40.x86_64")
 set(CMAKE_HOST_SYSTEM_PROCESSOR "x86_64")
 
-include("/home/ricsi/Documents/esp-idf/tools/cmake/toolchain-esp32c6.cmake")
+include("/home/ricsi/esp/esp-idf/tools/cmake/toolchain-esp32c6.cmake")
 
 set(CMAKE_SYSTEM "Generic")
 set(CMAKE_SYSTEM_NAME "Generic")

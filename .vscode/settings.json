@@ -4,6 +4,11 @@
         "esp_zigbee_core.h": "c",
         "zigbee_callback.h": "c",
         "zb_vendor.h": "c",
-        "zb_config_platform.h": "c"
+        "zb_config_platform.h": "c",
+        "array": "cpp",
+        "string_view": "cpp",
+        "format": "cpp",
+        "initializer_list": "cpp",
+        "span": "cpp"
     }
 }

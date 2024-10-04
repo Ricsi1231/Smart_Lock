@@ -13,7 +13,7 @@ namespace LockSystem {
         esp_err_t init(uint8_t rxPin, uint8_t txPin);
         esp_err_t setKey();
         esp_err_t open();
-        // bool getStatus();
+        esp_err_t turnOffAutomaticLatch();
 
         private:
         UartDriver::UartDriver uart;

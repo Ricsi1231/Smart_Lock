@@ -1,0 +1,85 @@
+ESP-ROM:esp32c6-20220919
+Build:Sep 19 2022
+rst:0x1 (POWERON),boot:0x6c (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:2
+load:0x40875720,len:0x1804
+load:0x4086c410,len:0xe2c
+load:0x4086e610,len:0x2e24
+entry 0x4086c41a
+[0;32mI (23) boot: ESP-IDF v5.2.2-dirty 2nd stage bootloader[0m
+[0;32mI (24) boot: compile time Oct  4 2024 06:19:29[0m
+[0;32mI (24) boot: chip revision: v0.0[0m
+[0;32mI (27) boot.esp32c6: SPI Speed      : 80MHz[0m
+[0;32mI (32) boot.esp32c6: SPI Mode       : DIO[0m
+[0;32mI (36) boot.esp32c6: SPI Flash Size : 2MB[0m
+[0;32mI (41) boot: Enabling RNG early entropy source...[0m
+[0;32mI (47) boot: Partition Table:[0m
+[0;32mI (50) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (57) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (72) boot:  2 factory          factory app      00 00 00010000 000e1000[0m
+[0;32mI (80) boot:  3 zb_storage       Unknown data     01 81 000f1000 00004000[0m
+[0;32mI (87) boot:  4 zb_fct           Unknown data     01 81 000f5000 00000400[0m
+[0;32mI (95) boot: End of partition table[0m
+[0;32mI (99) esp_image: segment 0: paddr=00010020 vaddr=42060020 size=0f128h ( 61736) map[0m
+[0;32mI (120) esp_image: segment 1: paddr=0001f150 vaddr=40800000 size=00ec8h (  3784) load[0m
+[0;32mI (122) esp_image: segment 2: paddr=00020020 vaddr=42000020 size=58450h (361552) map[0m
+[0;32mI (201) esp_image: segment 3: paddr=00078478 vaddr=40800ec8 size=0f678h ( 63096) load[0m
+[0;32mI (220) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (220) boot: Disabling RNG early entropy source...[0m
+[0;32mI (231) cpu_start: Unicore app[0m
+[0;33mW (240) clk: esp_perip_clk_init() has not been implemented yet[0m
+[0;32mI (247) cpu_start: Pro cpu start user code[0m
+[0;32mI (247) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (247) cpu_start: Application information:[0m
+[0;32mI (250) cpu_start: Project name:     main[0m
+[0;32mI (254) cpu_start: App version:      dbf6e43-dirty[0m
+[0;32mI (260) cpu_start: Compile time:     Oct  4 2024 06:19:26[0m
+[0;32mI (266) cpu_start: ELF file SHA256:  04b607ef6a38069e...[0m
+[0;32mI (272) cpu_start: ESP-IDF:          v5.2.2-dirty[0m
+[0;32mI (277) cpu_start: Min chip rev:     v0.0[0m
+[0;32mI (282) cpu_start: Max chip rev:     v0.99 [0m
+[0;32mI (287) cpu_start: Chip rev:         v0.0[0m
+[0;32mI (292) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (299) heap_init: At 40814CA0 len 00067970 (414 KiB): RAM[0m
+[0;32mI (305) heap_init: At 4087C610 len 00002F54 (11 KiB): RAM[0m
+[0;32mI (311) heap_init: At 50000000 len 00003FE8 (15 KiB): RTCRAM[0m
+[0;32mI (318) spi_flash: detected chip: generic[0m
+[0;32mI (322) spi_flash: flash io: dio[0m
+[0;33mW (326) spi_flash: Detected size(8192k) larger than the size in the binary image header(2048k). Using the size in the binary image header.[0m
+[0;32mI (339) sleep: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (346) sleep: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (353) coexist: coex firmware version: d96c1e51f[0m
+[0;32mI (359) coexist: coexist rom version 5b8dcfa[0m
+[0;32mI (364) main_task: Started on CPU0[0m
+[0;32mI (364) main_task: Calling app_main()[0m
+[0;32mI (364) ESP32_LOCK_UART: 
+UART init 0[0m
+[0;32mI (374) ESP32_LOCK_UART: Data: 50
+[0m
+[0;32mI (374) ESP32_LOCK_UART: Data: 16
+[0m
+[0;32mI (434) ESP32_LOCK_UART: Data: 7
+[0m
+[0;32mI (434) phy_init: phy_version 290,81efd96,May  8 2024,10:42:13[0m
+[0;32mI (474) phy: libbtbb version: f97b181, May  8 2024, 10:42:29[0m
+[0;32mI (484) main_task: Returned from app_main()[0m
+[0;32mI (494) ESP32_LOCK_UART: Signal type: 17[0m
+[0;32mI (494) ESP32_LOCK_UART: ZDO signal: ZDO Config Ready (0x17), status: ESP_FAIL[0m
+[0;32mI (494) ESP32_LOCK_UART: Signal type: 1[0m
+[0;32mI (494) ESP32_LOCK_UART: Device skip startup: 0[0m
+[0;32mI (504) ESP32_LOCK_UART: Zigbee stack is initialized[0m
+[0;32mI (2894) ESP32_LOCK_UART: Signal type: 6[0m
+[0;32mI (2894) ESP32_LOCK_UART: Device reboot: 0[0m
+[0;32mI (2904) ESP32_LOCK_UART: Signal type: a[0m
+[0;32mI (2904) ESP32_LOCK_UART: EUI: 4081a22c[0m
+[0;32mI (2904) ESP32_LOCK_UART: Joined network successfully (Extended PAN ID: dd:dd:dd:dd:dd:dd:dd:dd, PAN ID: 0x1a62, Channel:17, Short Address: 0x4ed2)[0m
+[0;32mI (8914) ESP32_LOCK_UART: Zigbee raw command callback[0m
+[0;32mI (8914) ESP32_LOCK_UART: Zigbee raw command callback enpoint: 10[0m
+CMD id: 0x1, Cluster 0x101
+[0;32mI (8924) RAW: bufid: 10 size: 1[0m
+Data: 0x01, Data Size: 0 
+[0;32mI (8924) ESP32_LOCK_UART: Data: 40
+[0m
+[0;32mI (8934) ESP32_LOCK_UART: Correct data received for open a lock[0m

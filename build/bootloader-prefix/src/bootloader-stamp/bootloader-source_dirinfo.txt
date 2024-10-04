@@ -4,6 +4,6 @@
 
 method=source_dir
 command=
-source_dir=/home/ricsi/Documents/esp-idf/components/bootloader/subproject
+source_dir=/home/ricsi/esp/esp-idf/components/bootloader/subproject
 work_dir=
 
