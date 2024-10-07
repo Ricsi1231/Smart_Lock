@@ -17,7 +17,6 @@ LockSystem::Lock ZigbeeComponent::Zigbee::Lock;
 namespace ZigbeeComponent {
     void Zigbee::start_high_level_commissioning(uint8_t mask) {
         ESP_ERROR_CHECK(esp_zb_bdb_start_top_level_commissioning(mask));
-#include "zboss_api_buf.h"
     }
     
     esp_err_t Zigbee::attribute_handler(const esp_zb_zcl_set_attr_value_message_t *message) {
@@ -57,6 +56,27 @@ namespace ZigbeeComponent {
         return error_status;
     }
 
+    void Zigbee::sendData(uint8_t lockState) {
+        esp_err_t error_status = ESP_OK;
+        
+        // esp_zb_zcl_report_attr_cmd_t cmd_req;
+
+        // cmd_req.address_mode = ESP_ZB_APS_ADDR_MODE_16_ENDP_PRESENT;
+        // cmd_req.attributeID = ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_STATE_ID;
+        // cmd_req.cluster_role = ESP_ZB_ZCL_CLUSTER_SERVER_ROLE;
+        // cmd_req.clusterID = ESP_ZB_ZCL_CLUSTER_ID_DOOR_LOCK;
+        
+        // cmd_req.zcl_basic_cmd.dst_addr_u.addr_short = 0x0000; 
+        // cmd_req.zcl_basic_cmd.dst_endpoint = HA_ESP_LOCK_ENDPOINT;
+        // cmd_req.zcl_basic_cmd.src_endpoint = HA_ESP_EZSP_ENDPOINT;
+
+        // esp_zb_lock_acquire(portMAX_DELAY);
+        // error_status = esp_zb_zcl_report_attr_cmd_req(&cmd_req);
+        // esp_zb_lock_release();
+
+        // ESP_LOGI(TAG, "attribute send message: 0x%x\n", error_status);
+    }
+
     bool Zigbee::esp_zb_zcl_raw_command_callback(uint8_t bufId) {
         ESP_LOGI(TAG, "Zigbee raw command callback");
         ESP_LOGI(TAG, "Zigbee raw command callback enpoint: %d", bufId);
@@ -87,21 +107,7 @@ namespace ZigbeeComponent {
             ESP_LOGI(TAG, "Correct data received for open a lock");
         }
 
-        esp_zb_zcl_report_attr_cmd_t cmd_req;
-
-        cmd_req.address_mode = ESP_ZB_APS_ADDR_MODE_DST_ADDR_ENDP_NOT_PRESENT;
-        cmd_req.attributeID = ESP_ZB_ZCL_CMD_DOOR_LOCK_UNLOCK_DOOR;
-        cmd_req.cluster_role = ESP_ZB_ZCL_CLUSTER_ID_DOOR_LOCK;
-        cmd_req.clusterID = ESP_ZB_ZCL_CLUSTER_ID_DOOR_LOCK;
-        cmd_req.zcl_basic_cmd.dst_endpoint = HA_ESP_LOCK_ENDPOINT;
-        // cmd_req.zcl_basic_cmd.dst_addr_u.addr_short = 0x4ed2;
-
-        esp_zb_lock_acquire(portMAX_DELAY);
-        error_status = esp_zb_zcl_report_attr_cmd_req(&cmd_req);
-        esp_zb_lock_release();
-        ESP_LOGI(TAG, "attribute send message: %x\n", error_status);
-
-        // // zb_zcl_send_default_handler(param, info, status);
+        sendData(0);
 
         return false;
     }
@@ -174,9 +180,9 @@ namespace ZigbeeComponent {
             .actuator_enabled = true
         };
 
-        esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_STATE_ID, &test_attr);
-        esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_TYPE_ID, &test_attr);
-        esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_OPEN_PERIOD_ID, &test_attr);
+        esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_STATE_ID, &test_attr2);
+        esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_LOCK_TYPE_ID, &test_attr2);
+        esp_zb_door_lock_cluster_add_attr(doorClusterAttributes, ESP_ZB_ZCL_ATTR_DOOR_LOCK_OPEN_PERIOD_ID, &test_attr2);
 
         esp_zb_attribute_list_t *doorLockCluster = esp_zb_door_lock_cluster_create(&doorLockClusterConfig);
 

@@ -1,0 +1,59 @@
+[1/5] cd /home/ricsi/Documents/Smart_Lock/build/esp-idf/esptool_py && /home/ricsi/.espressif/python_env/idf5.2_py3.12_env/bin/python /home/ricsi/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/ricsi/Documents/Smart_Lock/build/partition_table/partition-table.bin /home/ricsi/Documents/Smart_Lock/build/main.bin
+main.bin binary size 0x77d90 bytes. Smallest app partition is 0xe1000 bytes. 0x69270 bytes (47%) free.
+[2/5] Performing build step for 'bootloader'
+[1/1] cd /home/ricsi/Documents/Smart_Lock/build/bootloader/esp-idf/esptool_py && /home/ricsi/.espressif/python_env/idf5.2_py3.12_env/bin/python /home/ricsi/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /home/ricsi/Documents/Smart_Lock/build/bootloader/bootloader.bin
+Bootloader binary size 0x54b0 bytes. 0x2b50 bytes (34%) free.
+[3/5] No install step for 'bootloader'
+[4/5] Completed 'bootloader'
+[4/5] cd /home/ricsi/esp/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/ricsi/esp/esp-idf -D "SERIAL_TOOL=/home/ricsi/.espressif/python_env/idf5.2_py3.12_env/bin/python;;/home/ricsi/esp/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32c6" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/ricsi/Documents/Smart_Lock/build -P /home/ricsi/esp/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32c6 -p /dev/ttyUSB0 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x0 bootloader/bootloader.bin 0x10000 main.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.7.0
+Serial port /dev/ttyUSB0
+Connecting....
+Chip is ESP32-C6 (QFN40) (revision v0.0)
+Features: WiFi 6, BT 5, IEEE802.15.4
+Crystal is 40MHz
+MAC: 40:4c:ca:ff:fe:4d:ba:9c
+BASE MAC: 40:4c:ca:4d:ba:9c
+MAC_EXT: ff:fe
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00000000 to 0x00005fff...
+Flash will be erased from 0x00010000 to 0x00087fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+Compressed 21680 bytes to 13077...
+Writing at 0x00000000... (100 %)
+Wrote 21680 bytes (13077 compressed) at 0x00000000 in 0.6 seconds (effective 299.0 kbit/s)...
+Hash of data verified.
+Compressed 490896 bytes to 283150...
+Writing at 0x00010000... (5 %)
+Writing at 0x0001cfa8... (11 %)
+Writing at 0x00023be8... (16 %)
+Writing at 0x0002b502... (22 %)
+Writing at 0x000312a2... (27 %)
+Writing at 0x000370cf... (33 %)
+Writing at 0x0003ca9a... (38 %)
+Writing at 0x00042a73... (44 %)
+Writing at 0x00048c17... (50 %)
+Writing at 0x0004fc47... (55 %)
+Writing at 0x0005616f... (61 %)
+Writing at 0x0005c4f3... (66 %)
+Writing at 0x00063389... (72 %)
+Writing at 0x0006ac2b... (77 %)
+Writing at 0x00071206... (83 %)
+Writing at 0x00077663... (88 %)
+Writing at 0x0007e393... (94 %)
+Writing at 0x00085570... (100 %)
+Wrote 490896 bytes (283150 compressed) at 0x00010000 in 6.5 seconds (effective 599.9 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 136...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (136 compressed) at 0x00008000 in 0.0 seconds (effective 561.2 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

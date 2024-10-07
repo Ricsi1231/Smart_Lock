@@ -9,6 +9,7 @@
 #define ED_AGING_TIMEOUT                ESP_ZB_ED_AGING_TIMEOUT_64MIN
 #define ED_KEEP_ALIVE                   3000    
 #define HA_ESP_LOCK_ENDPOINT            1
+#define HA_ESP_EZSP_ENDPOINT            (HA_ESP_LOCK_ENDPOINT)
 #define ESP_ZB_PRIMARY_CHANNEL_MASK     ESP_ZB_TRANSCEIVER_ALL_CHANNELS_MASK  
 
 #define UART_RX_PIN (GPIO_NUM_4)
@@ -60,6 +61,7 @@ namespace ZigbeeComponent {
             static esp_err_t action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message);
             static bool esp_zb_zcl_raw_command_callback(uint8_t bufId);
             static void sendZclStatus(esp_zb_zcl_command_send_status_message_t message);
+            static void sendData(uint8_t lockState);
             //static zb_buf_ent_t *esp_zb_buf_get_by_id(zb_bufid_t buf); 
             //static zb_uint8_t *esp_zb_buf_get_tail(zb_bufid_t buf, zb_uint16_t size); 
 

@@ -1,0 +1,126 @@
+[1/12] Performing build step for 'bootloader'
+[1/1] cd /home/ricsi/Documents/Smart_Lock/build/bootloader/esp-idf/esptool_py && /home/ricsi/.espressif/python_env/idf5.2_py3.12_env/bin/python /home/ricsi/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x0 /home/ricsi/Documents/Smart_Lock/build/bootloader/bootloader.bin
+Bootloader binary size 0x54b0 bytes. 0x2b50 bytes (34%) free.
+[2/12] No install step for 'bootloader'
+[3/12] Completed 'bootloader'
+[4/12] Building CXX object esp-idf/main/CMakeFiles/__idf_main.dir/main.cpp.obj
+In file included from /home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_trace.h:12,
+                 from /home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_core.h:14,
+                 from /home/ricsi/Documents/Smart_Lock/components/zigbee/include/zigbee.hpp:5,
+                 from /home/ricsi/Documents/Smart_Lock/main/main.cpp:2:
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:134:32: warning: attribute ignored in declaration of 'union esp_zb_zcl_cluster_s::<unnamed>' [-Wattributes]
+  134 |     ESP_ZB_PACKED_STRUCT union {
+      |                                ^
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:134:32: note: attribute for 'union esp_zb_zcl_cluster_s::<unnamed>' must follow the 'union' keyword
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:320:32: warning: attribute ignored in declaration of 'union esp_zb_endpoint_s::<unnamed>' [-Wattributes]
+  320 |     ESP_ZB_PACKED_STRUCT union {
+      |                                ^
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:320:32: note: attribute for 'union esp_zb_endpoint_s::<unnamed>' must follow the 'union' keyword
+/home/ricsi/Documents/Smart_Lock/main/main.cpp: In function 'void app_main()':
+/home/ricsi/Documents/Smart_Lock/main/main.cpp:11:17: warning: unused variable 'TAG' [-Wunused-variable]
+   11 |     const char *TAG = "ESP32_LOCK_UART";
+      |                 ^~~
+/home/ricsi/Documents/Smart_Lock/main/main.cpp: In function 'void esp_zb_app_signal_handler(esp_zb_app_signal_t*)':
+/home/ricsi/Documents/Smart_Lock/main/main.cpp:52:44: warning: cast between incompatible function types from 'esp_err_t (*)(uint8_t)' {aka 'int (*)(unsigned char)'} to 'esp_zb_callback_t' {aka 'void (*)(unsigned char)'} [-Wcast-function-type]
+   52 |                     esp_zb_scheduler_alarm((esp_zb_callback_t)esp_zb_bdb_start_top_level_commissioning, ESP_ZB_BDB_MODE_NETWORK_STEERING, 1000);
+      |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[5/12] Building CXX object esp-idf/zigbee/CMakeFiles/__idf_zigbee.dir/src/zigbee.cpp.obj
+In file included from /home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_trace.h:12,
+                 from /home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_core.h:14,
+                 from /home/ricsi/Documents/Smart_Lock/components/zigbee/include/zigbee.hpp:5,
+                 from /home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:1:
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:134:32: warning: attribute ignored in declaration of 'union esp_zb_zcl_cluster_s::<unnamed>' [-Wattributes]
+  134 |     ESP_ZB_PACKED_STRUCT union {
+      |                                ^
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:134:32: note: attribute for 'union esp_zb_zcl_cluster_s::<unnamed>' must follow the 'union' keyword
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:320:32: warning: attribute ignored in declaration of 'union esp_zb_endpoint_s::<unnamed>' [-Wattributes]
+  320 |     ESP_ZB_PACKED_STRUCT union {
+      |                                ^
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_type.h:320:32: note: attribute for 'union esp_zb_endpoint_s::<unnamed>' must follow the 'union' keyword
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp: In static member function 'static esp_err_t ZigbeeComponent::Zigbee::attribute_handler(const esp_zb_zcl_set_attr_value_message_t*)':
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:25:45: warning: comparison between 'const enum esp_zb_zcl_attr_type_t' and 'enum esp_zb_zcl_on_off_attr_t' [-Wenum-compare]
+   25 |             if(message->attribute.data.type == ESP_ZB_ZCL_ATTR_ON_OFF_ON_OFF_ID && message->attribute.data.type == ESP_ZB_ZCL_ATTR_TYPE_BOOL) {
+      |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp: In static member function 'static bool ZigbeeComponent::Zigbee::esp_zb_zcl_raw_command_callback(uint8_t)':
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:83:19: warning: unused variable 'error_status' [-Wunused-variable]
+   83 |         esp_err_t error_status = ESP_OK;
+      |                   ^~~~~~~~~~~~
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:85:17: warning: unused variable 'lockState' [-Wunused-variable]
+   85 |         uint8_t lockState = 0;
+      |                 ^~~~~~~~~
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp: In static member function 'static void ZigbeeComponent::Zigbee::rtosTask(void*)':
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:206:35: warning: 'void esp_zb_main_loop_iteration()' is deprecated [-Wdeprecated-declarations]
+  206 |         esp_zb_main_loop_iteration();
+      |         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+/home/ricsi/Documents/Smart_Lock/managed_components/espressif__esp-zigbee-lib/include/esp_zigbee_core.h:683:6: note: declared here
+  683 | void esp_zb_main_loop_iteration(void);
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp: In static member function 'static void ZigbeeComponent::Zigbee::init()':
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:213:9: warning: missing initializer for member 'esp_zb_radio_config_t::radio_uart_config' [-Wmissing-field-initializers]
+  213 |         };
+      |         ^
+/home/ricsi/Documents/Smart_Lock/components/zigbee/src/zigbee.cpp:213:9: warning: missing initializer for member 'esp_zb_host_config_t::host_uart_config' [-Wmissing-field-initializers]
+[6/12] Linking C static library esp-idf/zigbee/libzigbee.a
+[7/12] Linking C static library esp-idf/main/libmain.a
+[8/12] Generating ld/sections.ld
+[9/12] Linking CXX executable main.elf
+[10/12] Generating binary image from built executable
+esptool.py v4.7.0
+Creating esp32c6 image...
+Merged 2 ELF sections
+Successfully created esp32c6 image.
+Generated /home/ricsi/Documents/Smart_Lock/build/main.bin
+[11/12] cd /home/ricsi/Documents/Smart_Lock/build/esp-idf/esptool_py && /home/ricsi/.espressif/python_env/idf5.2_py3.12_env/bin/python /home/ricsi/esp/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /home/ricsi/Documents/Smart_Lock/build/partition_table/partition-table.bin /home/ricsi/Documents/Smart_Lock/build/main.bin
+main.bin binary size 0x77d70 bytes. Smallest app partition is 0xe1000 bytes. 0x69290 bytes (47%) free.
+[11/12] cd /home/ricsi/esp/esp-idf/components/esptool_py && /usr/bin/cmake -D IDF_PATH=/home/ricsi/esp/esp-idf -D "SERIAL_TOOL=/home/ricsi/.espressif/python_env/idf5.2_py3.12_env/bin/python;;/home/ricsi/esp/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32c6" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/home/ricsi/Documents/Smart_Lock/build -P /home/ricsi/esp/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32c6 -p /dev/ttyUSB0 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 2MB 0x0 bootloader/bootloader.bin 0x10000 main.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.7.0
+Serial port /dev/ttyUSB0
+Connecting....
+Chip is ESP32-C6 (QFN40) (revision v0.0)
+Features: WiFi 6, BT 5, IEEE802.15.4
+Crystal is 40MHz
+MAC: 40:4c:ca:ff:fe:4d:ba:9c
+BASE MAC: 40:4c:ca:4d:ba:9c
+MAC_EXT: ff:fe
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00000000 to 0x00005fff...
+Flash will be erased from 0x00010000 to 0x00087fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+Compressed 21680 bytes to 13077...
+Writing at 0x00000000... (100 %)
+Wrote 21680 bytes (13077 compressed) at 0x00000000 in 0.6 seconds (effective 297.7 kbit/s)...
+Hash of data verified.
+Compressed 490864 bytes to 283144...
+Writing at 0x00010000... (5 %)
+Writing at 0x0001cfa2... (11 %)
+Writing at 0x00023be4... (16 %)
+Writing at 0x0002b4f7... (22 %)
+Writing at 0x00031292... (27 %)
+Writing at 0x000370c4... (33 %)
+Writing at 0x0003ca8f... (38 %)
+Writing at 0x00042a5e... (44 %)
+Writing at 0x00048c06... (50 %)
+Writing at 0x0004fc2f... (55 %)
+Writing at 0x0005615e... (61 %)
+Writing at 0x0005c4e1... (66 %)
+Writing at 0x0006338c... (72 %)
+Writing at 0x0006ac1f... (77 %)
+Writing at 0x000711ee... (83 %)
+Writing at 0x0007764e... (88 %)
+Writing at 0x0007e378... (94 %)
+Writing at 0x00085556... (100 %)
+Wrote 490864 bytes (283144 compressed) at 0x00010000 in 6.6 seconds (effective 598.6 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 136...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (136 compressed) at 0x00008000 in 0.0 seconds (effective 544.6 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...
